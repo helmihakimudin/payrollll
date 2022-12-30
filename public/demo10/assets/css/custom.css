@@ -1,0 +1,144 @@
+.image-trim {
+    max-height: 750px;
+    max-width: 650px;
+    overflow-y: hidden;
+}
+.shortcut-header {
+    height: 250px;
+}
+.img-avatar-girl {
+    width: 60%;
+    bottom: -40px;
+}
+.img-avatar-boy {
+    width: 70%;
+    bottom: -60px;
+}
+.user-hello {
+    font-size: 30px;
+    color: black;
+}
+.kt-body-custom {
+    height: 300px;
+}
+.navigation-menu-custom {
+    bottom: -132px;
+}
+.font-11px {
+    font-size: 19px;
+}
+.font-8px {
+    font-size: 13px !important;
+}
+.elips-text {
+    max-height: 55px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.kt-widget__media-custom {
+    width: 39px !important;
+}
+
+td {
+    border-top: none !important;
+    padding: 0.75rem;
+}
+
+.td-border {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #ebedf2 !important;
+}
+
+.col-merge {
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+}
+
+.aside-scroll-custom {
+    height: none !important;
+    overflow: hidden;
+}
+
+.text-image-cover {
+    position: absolute;
+    top: 180px;
+    left: 36px;
+    font-size: 27px;
+    color: white;
+    max-width: 280px;
+    font-family: Poppins, Helvetica, sans-serif;
+    opacity: 65% !important;
+}
+
+@media (min-width: 1024px) {
+    .col-aside {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 25%;
+        flex: 0 0 25%;
+        max-width: 21% !important;
+    }
+
+    .col-card-content {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 75%;
+        flex: 3 0 75% !important;
+        max-width: 87%;
+    }
+}
+
+.kt-portlet-custom {
+    color: white;
+    background-image: linear-gradient(#6a5acd, #1e90ff);
+}
+
+.hidden {
+    display: none;
+}
+
+.lh-base {
+    line-height: 1.5 !important;
+}
+
+.lh-lg {
+    line-height: 2 !important;
+}
+
+.successhexagon1:before {
+    border-bottom: 7.5rem solid #eafffd !important;
+}
+.successhexagon1:after {
+    border-top: 7.5rem solid #eafffd !important;
+}
+
+.successhexagon2:before {
+    border-bottom: 3.71rem solid #eafffd !important;
+}
+
+.successhexagon2:after {
+    border-top: 3.71rem solid #eafffd !important;
+}
+
+.dangerhexagon1:before {
+    border-bottom: 7.5rem solid #ffeffe !important;
+}
+.dangerhexagon1:after {
+    border-top: 7.5rem solid #ffeffe !important;
+}
+
+.dangerhexagon2:before {
+    border-bottom: 3.71rem solid #ffeffe !important;
+}
+
+.dangerhexagon2:after {
+    border-top: 3.71rem solid #ffeffe !important;
+}
+
+.box-shadow-none {
+    box-shadow: none !important;
+}
+
+table.dataTable.table-sm > thead > tr > th {
+    padding-right: 0% !important;
+}

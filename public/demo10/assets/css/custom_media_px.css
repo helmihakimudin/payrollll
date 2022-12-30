@@ -1,0 +1,121 @@
+
+@media only screen and (max-width: 820px) {
+    .image-trim{
+        overflow-y:visible;
+        max-width: 1000px;
+        max-height: 1000px;
+    }
+    .img-avatar{
+        width: 25%;
+        bottom:90px;
+        left:320px;
+    }
+
+    .img-avatar-girl{
+        width: 40%;
+        bottom:90px;
+        left:250px;
+    }
+    .img-avatar-boy{
+        width: 40%;
+        bottom:90px;
+        left:250px;
+    }
+    .elips-text{
+        max-height: 55px; 
+        overflow: hidden;
+        text-overflow:ellipsis; 
+    }
+}
+
+@media only screen and (max-width: 680px) {
+    .image-trim{
+        overflow-y:visible;
+        max-width: 1000px;
+        max-height: 1000px;
+    }
+    .img-avatar-girl{
+        width: 40%;
+        bottom:90px;
+        left:250px;
+    }
+    .img-avatar-boy{
+        width: 40%;
+        bottom:90px;
+        left:250px;
+    }
+    .elips-text{
+        max-height: 55px; 
+        overflow: hidden;
+        text-overflow:ellipsis; 
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .image-trim{
+        overflow-y:visible;
+        max-width: 1000px;
+        max-height: 1000px;
+    }
+    .img-avatar-girl{
+        width: 40%;
+        bottom:90px;
+        left:250px;
+    }
+    .img-avatar-boy{
+        width: 40%;
+        bottom:90px;
+        left:250px;
+    }
+    .elips-text{
+        max-height: 55px; 
+        overflow: hidden;
+        text-overflow:ellipsis; 
+    }
+}
+
+@media only screen and (max-width: 412px) {
+    .image-trim{
+        overflow-y:visible;
+        max-width: 1000px;
+        max-height: 1000px;
+    }
+    .img-avatar-girl{
+        width: 40%;
+        bottom:-50px;
+        left:200px;
+    }
+    .img-avatar-boy{
+        width: 40%;
+        bottom:90px;
+        left:200px;
+    }
+    .elips-text{
+        max-height: 55px; 
+        overflow: hidden;
+        text-overflow:ellipsis; 
+    }
+}
+
+@media only screen and (max-width: 360px) {
+    .image-trim{
+        overflow-y:visible;
+        max-width: 1000px;
+        max-height: 1000px;
+    }
+    .img-avatar-girl{
+        width: 40%;
+        bottom:-0px;
+        left:200px;
+    }
+    .img-avatar-boy{
+        width: 40%;
+        bottom:90px;
+        left:200px;
+    }
+    .elips-text{
+        max-height: 55px; 
+        overflow: hidden;
+        text-overflow:ellipsis; 
+    }
+}
