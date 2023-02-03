@@ -28,6 +28,9 @@
     .select2-container {
         display: block;
     }
+    #success-title {
+        visibility: hidden;
+    }
 </style>            
 @endpush
 @section('content')
@@ -37,9 +40,17 @@
                 <h3 class="kt-portlet__head-title">Transaction Time Off</h3>
             </div>
             <div class="kt-portlet__head-toolbar">
-                <a href="{{ route('timeoff')}}" class="btn btn-sm btn-secondary btn-elevate mx-3 btn-icon-sm">
+                <a href="{{ route('timeoff')}}" class="btn btn-sm btn-secondary btn-elevate mx-4 btn-icon-sm">
                     <i class="la la-arrow-left"></i>
                     Back
+                </a>
+                <a href="#" class="btn btn-sm btn-outline-brand btn-elevate btn-icon-sm">
+                    <i class="la la-download"></i>
+                    Import
+                </a>
+                <a href="#" class="btn mx-4 btn-sm btn-outline-brand btn-elevate btn-icon-sm">
+                    <i class="la la-upload"></i>
+                    Export
                 </a>
                 <a href="{{ route('timeoff.assign.create')}}" class="btn btn-sm btn-brand btn-elevate btn-icon-sm">
                     <i class="la la-plus"></i>
@@ -54,7 +65,6 @@
                     <table class="table table-striped- table-bordered table-hover table-checkable kt_table_1 mt-0" id="timeoffassignTable">
                         <thead>
                             <tr>
-                                
                                 <th>Time Off Type</th>
                                 <th>Type</th>
                                 <th>Transaction ID</th>

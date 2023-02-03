@@ -10,7 +10,7 @@
 				<div class="col-lg-3 col-aside">
                     <!--begin:: Portlet-->
                     <div class="kt-portlet">
-                        <div class="kt-portlet__body">
+                        <div class="kt-portlet__body p-2">
                             <!--begin::Widget -->
                             <div class="kt-widget kt-widget--user-profile-4">
                                 <div class="kt-widget__head">
@@ -30,17 +30,6 @@
                                                 @else
                                                 <button type="button" class="btn btn-label-warning btn-sm">Non Active</button> 
                                                 @endif
-                                            </div>
-                                            <div class="kt-widget__action">
-                                                <a href="#" class="btn btn-icon btn-circle btn-label-facebook">
-                                                    <i class="socicon-facebook"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-icon btn-circle btn-label-twitter">
-                                                    <i class="socicon-twitter"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-icon btn-circle btn-label-google">
-                                                    <i class="socicon-google"></i>
-                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -65,5 +54,5 @@
 </div>
 @endsection
 @push('scriptjs')
-
+    @stack('js')
 @endpush

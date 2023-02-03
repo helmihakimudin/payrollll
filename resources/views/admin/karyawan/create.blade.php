@@ -92,13 +92,13 @@
                         </div>
                     </div>
                 </div>
-                <!--end: Form Wizard Nav -->  
+                <!--end: Form Wizard Nav -->
                 <div class="kt-portlet">
                     <div class="kt-portlet__body kt-portlet__body--fit">
                         <div class="kt-grid">
                             <div class="kt-grid__item kt-grid__item--fluid kt-wizard-v4__wrapper">
                                 <!--begin: Form Wizard Form-->
-                               
+
                                 <form action="{{route("employee.store")}}" method="POST" class="kt-form" id="kt_user_add_form" >
                                     @csrf
                                     <!-- Begin::Wizard Step 1-->
@@ -155,7 +155,7 @@
                                                                             <input class="form-control" type="number" name="phone" placeholder="Phone" required>
                                                                         </div>
                                                                     </div>
-                                                                </div> 
+                                                                </div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <div class="row">
@@ -170,7 +170,7 @@
                                                                         <label><span style="color:red">*</span> Birthday </label>
                                                                         <div class="input-group">
                                                                             <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-birthday-cake"></i></span></div>
-                                                                            <input class="form-control datepicker" type="text" name="date_of_birth"  placeholder="Birthday" readonly required>
+                                                                            <input class="form-control datepicker" type="text" name="date_of_birth"  placeholder="Birthday" required>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -198,8 +198,8 @@
                                                             <div class="form-group">
                                                                 <div class="row">
                                                                     <div class="col-lg-6 col-xl-6">
-                                                                        <label><span style="color:red">*</span>Blood Type </label>
-                                                                        <select name="blood_type" id="blood_type" class="form-control select2_add_employee" required>
+                                                                        <label>Blood Type </label>
+                                                                        <select name="blood_type" id="blood_type" class="form-control select2_add_employee">
                                                                             <option value="" selected>Select Blood Type</option>
                                                                             <option value="A">A</option>
                                                                             <option value="B">B</option>
@@ -208,8 +208,8 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-lg-6 col-xl-6">
-                                                                        <label><span style="color:red">*</span>Religion</label>
-                                                                        <select name="religion" id="religion" class="form-control select2_add_employee" required>
+                                                                        <label>Religion</label>
+                                                                        <select name="religion" id="religion" class="form-control select2_add_employee">
                                                                             <option value="" selected>Select</option>
                                                                             <option value="Islam">Islam</option>
                                                                             <option value="Catholic">Catholic</option>
@@ -231,21 +231,17 @@
                                                             <div class="form-group">
                                                                 <div class="row">
                                                                     <div class="col-lg-6 col-xl-6">
-                                                                        <label><span style="color:red">*</span> Identity Type</label>
+                                                                        <label><span style="color:red">*</span> KTP</label>
                                                                         <div class="input-group">
                                                                             <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-address-card"></i></span></div>
-                                                                            <select name="identity_type" id="identity_type" class="form-control select2_add_employee" required>
-                                                                                <option value="" selected>Select</option>
-                                                                                <option value="SIM">SIM</option>
-                                                                                <option value="KTP">KTP</option>
-                                                                            </select>
+                                                                            <input class="form-control" type="number"  placeholder="Number KTP" required>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-lg-6 col-xl-6">
-                                                                        <label><span style="color:red">*</span>Identity Number</label>
+                                                                        <label>Passport</label>
                                                                         <div class="input-group">
                                                                             <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-id-card-alt"></i></span></div>
-                                                                            <input class="form-control" type="number" name="identity_number"  placeholder="Ex : KTP | SIM" required>
+                                                                            <input class="form-control" type="number"  placeholder="Number Passport">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -253,17 +249,17 @@
                                                             <div class="form-group">
                                                                 <div class="row">
                                                                     <div class="col-lg-6 col-xl-6">
-                                                                        <label><span style="color:red">*</span> Identity Expired Date </label>
+                                                                        <label><span style="color:red">*</span> Identity Expired Date KTP </label>
                                                                         <div class="input-group">
                                                                             <div class="input-group-prepend"><span class="input-group-text"><i class="flaticon-calendar-with-a-clock-time-tools"></i></span></div>
-                                                                            <input class="form-control datepicker" type="text" name="expired_identity"  placeholder="Identity Expired Date" readonly>
+                                                                            <input class="form-control datepicker" type="text" name="expired_identity"  placeholder="Identity Expired Date">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-lg-6 col-xl-6">
-                                                                        <label><span style="color:red">*</span>Postal Code </label>
+                                                                        <label>Postal Code </label>
                                                                         <div class="input-group">
                                                                             <div class="input-group-prepend"><span class="input-group-text"><i class="flaticon2-location"></i></span></div>
-                                                                            <input class="form-control" type="number" name="postal_code"  placeholder="Postal Code"  required>
+                                                                            <input class="form-control" type="number" name="postal_code"  placeholder="Postal Code">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -288,7 +284,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
-                                                                <label>Residence Address</label>
+                                                                <label>Residential address</label>
                                                                 <div class="input-group">
                                                                     <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-map-marked-alt"></i></span></div>
                                                                     <textarea name="residential_address" id="residential_address" cols="30" rows="3" class="form-control" placeholder="Please Enter Residence address" required></textarea>
@@ -318,11 +314,13 @@
                                                             <div class="form-group">
                                                                 <div class="row">
                                                                     <div class="col-lg-6 col-xl-6">
-                                                                        <label><span style="color:red">*</span>Employee ID</label>
-                                                                        <div class="input-group">
-                                                                            <div class="input-group-prepend"><span class="input-group-text"><i class="flaticon2-user"></i></span></div>
-                                                                            <input class="form-control" type="text" name="employee_id"  placeholder="Employee ID" required>
-                                                                        </div>
+                                                                        <label><span style="color:red">*</span>Organization</label>
+                                                                        <select name="organization_id" id="organization_id" class="form-control select2_add_employee" required>
+                                                                            <option value="" selected>Select</option>
+                                                                            @foreach(DB::table('organization')->get() as $row)
+                                                                            <option value="{{$row->id}}" name="{{$row->name}}">{{$row->name}}</option>
+                                                                            @endforeach
+                                                                        </select>
                                                                     </div>
                                                                     <div class="col-lg-6 col-xl-6">
                                                                         <label><span style="color:red">*</span>Barcode</label>
@@ -336,20 +334,18 @@
                                                             <div class="form-group">
                                                                 <div class="row">
                                                                     <div class="col-lg-6 col-xl-6">
+                                                                        <label><span style="color:red">*</span>Employee ID</label>
+                                                                        <div class="input-group">
+                                                                            <div class="input-group-prepend"><span class="input-group-text"><i class="flaticon2-user"></i></span></div>
+                                                                            <input class="form-control" type="text" name="employee_id" readonly  placeholder="Employee ID" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-6 col-xl-6">
                                                                         <label><span style="color:red">*</span>Employement Status</label>
                                                                         <select name="employee_status" id="employee_status" class="form-control select2_add_employee" required>
                                                                             <option value="" selected>Select</option>
                                                                             <option value="Active">Active</option>
                                                                             <option value="Non Active">Non Active</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="col-lg-6 col-xl-6">
-                                                                        <label><span style="color:red">*</span>Organization</label>
-                                                                        <select name="organization_id" id="organization_id" class="form-control select2_add_employee" required>
-                                                                            <option value="" selected>Select</option>
-                                                                            @foreach(DB::table('organization')->get() as $row)
-                                                                            <option value="{{$row->id}}" name="{{$row->name}}">{{$row->name}}</option>
-                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -382,19 +378,19 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
-                                                                <div class="row"> 
+                                                                <div class="row">
                                                                     <div class="col-lg-6 col-xl-6">
                                                                         <label><span style="color:red">*</span> Join Date </label>
                                                                         <div class="input-group">
                                                                             <div class="input-group-prepend"><span class="input-group-text"><i class="flaticon2-calendar-9"></i></span></div>
-                                                                            <input class="form-control datepicker" type="text" name="join_date"  placeholder="Join Date" readonly required>
+                                                                            <input class="form-control datepicker" type="text" name="join_date"  placeholder="Join Date" required>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-lg-6 col-xl-6">
                                                                         <label><span style="color:red">*</span> End Date </label>
                                                                         <div class="input-group">
                                                                             <div class="input-group-prepend"><span class="input-group-text"><i class="flaticon2-calendar-9"></i></span></div>
-                                                                            <input class="form-control datepicker" type="text" name="end_date"  placeholder="End Date" readonly required>
+                                                                            <input class="form-control datepicker" type="text" name="end_date"  placeholder="End Date" required>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -423,15 +419,6 @@
                                                             </div>
                                                             <div class="form-group">
                                                                 <div class="row">
-                                                                    {{-- <div class="col-lg-6 col-xl-6">
-                                                                        <label><span style="color:red">*</span>Schedule</label>
-                                                                        <select name="schedule_id" id="schedule_id" class="form-control select2_add_employee" required>
-                                                                            <option value="" selected>Select</option>
-                                                                            @foreach(DB::table('shifts')->get() as $row)
-                                                                            <option value="{{$row->id}}" name="{{$row->name}}">{{$row->name}}</option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div> --}}
                                                                     <div class="col-lg-6 col-xl-6">
                                                                         <label><span style="color:red">*</span>Approval Line</label>
                                                                         <select name="approval_line_id" id="approval_line_id" class="form-control select2_add_employee" required>
@@ -623,7 +610,7 @@
                                                                         <label><span style="color:red">*</span> Taxable Date </label>
                                                                         <div class="input-group">
                                                                             <div class="input-group-prepend"><span class="input-group-text"><i class="flaticon2-calendar-9"></i></span></div>
-                                                                            <input class="form-control datepicker" type="text" name="taxable_date"  placeholder="Date" readonly required>
+                                                                            <input class="form-control datepicker" type="text" name="taxable_date"  placeholder="Date" required>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-lg-6 col-xl-6">
@@ -675,7 +662,7 @@
                                                                         <label><span style="color:red">*</span> BPJS Ketenagakerjaan Date </label>
                                                                         <div class="input-group">
                                                                             <div class="input-group-prepend"><span class="input-group-text"><i class="flaticon2-calendar-9"></i></span></div>
-                                                                            <input class="form-control datepicker" type="text" name="bpjs_kerja_date"  placeholder="Date" readonly required>
+                                                                            <input class="form-control datepicker" type="text" name="bpjs_kerja_date"  placeholder="Date" required>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -704,7 +691,7 @@
                                                                         <label><span style="color:red">*</span> BPJS Kesehatan Date </label>
                                                                         <div class="input-group">
                                                                             <div class="input-group-prepend"><span class="input-group-text"><i class="flaticon2-calendar-9"></i></span></div>
-                                                                            <input class="form-control datepicker" type="text" name="bpjs_kesehatan_date"  placeholder="Date" readonly required>
+                                                                            <input class="form-control datepicker" type="text" name="bpjs_kesehatan_date"  placeholder="Date" required>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-lg-6 col-xl-6">
@@ -745,7 +732,7 @@
                                                                         <label><span style="color:red">*</span> Jaminan Pensiun Date </label>
                                                                         <div class="input-group">
                                                                             <div class="input-group-prepend"><span class="input-group-text"><i class="flaticon2-calendar-9"></i></span></div>
-                                                                            <input class="form-control datepicker" type="text" name="jaminan_pensiun_date"  placeholder="Date" readonly required>
+                                                                            <input class="form-control datepicker" type="text" name="jaminan_pensiun_date"  placeholder="Date" required>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -875,21 +862,20 @@
                                                                         <br>Jaminan Pensiun Date <span id="get_jaminan_pensiun_date_view"  style="color:blue;"></span>
                                                                     </div>
                                                                 </div>
-                                                            </div>   
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <hr>
-                                        <div class="kt-heading kt-heading--md text-center">Invite The to access Talenta</div>
+                                        <div class="kt-heading kt-heading--md text-center">Invite the employee to access E-Smart</div>
                                         <div class="kt-section kt-section--first">
                                             <div class="kt-wizard-v4__form" >
                                                 <div class="row justify-content-center">
                                                     <div class="col-xl-6">
                                                         <div class="text-center">
                                                             <i class="flaticon-users-1 fa-4x"></i>
-                                                            <h5>Invite the employee to access E-Smart</h5>
                                                             <p>You Have successfully added employee data. To continue the process, you can invite employess to access E-Smart</p>
                                                         </div>
 
@@ -898,7 +884,7 @@
                                                                 <div class="form-group mb-3">
                                                                     <div class="kt-checkbox-list">
                                                                         <label class="kt-checkbox kt-checkbox--success">
-                                                                            <input type="checkbox"> Invite to E-Smart
+                                                                            <input type="checkbox" name="email_invitation"> Invite to E-Smart
                                                                             <span></span>
                                                                         </label>
                                                                     </div>
@@ -1003,18 +989,26 @@
     });
     $("[name='citizien_id_address']").keyup(function(){
         localStorage.setItem("citizien_id_address",$(this).val());
+        localStorage.setItem("citizien_id_address_copy",$(this).val());
     });
-    let get_residential_address_copy    = localStorage.getItem("residential_address_copy");
-    let citizien_id_address_back    = localStorage.getItem("citizien_id_address");
+    let get_residential_address_copy = localStorage.getItem("residential_address_copy");
+    let get_citizien_id_address_copy = localStorage.getItem("citizien_id_address_copy");
+
     $("input[name='checkbox_residential_address']").click(function () {
         if ($(this).is(":checked")){
             localStorage.setItem("checkbox_residential_address", 1);
-            $("[name='citizien_id_address']").html(get_residential_address_copy);
+            // $("#residential_address").val($("[name='citizien_id_address']").val());
+            // $("#residential_address").text($("[name='citizien_id_address']").val());
+            let get_citizien_id_address_copy = localStorage.getItem("citizien_id_address_copy");
+            $("#residential_address").val(get_citizien_id_address_copy)
         } else {
             localStorage.removeItem("checkbox_residential_address");
-            $("[name='citizien_id_address']").html(citizien_id_address_back);
+            let residential_address_back = localStorage.getItem("residential_address");
+            // $("[name='residential_address']").html(residential_address_back);
+            $("#residential_address").val(residential_address_back)
         }
     });
+
     $("[name='employee_id']").keyup(function(reviewData){
         localStorage.setItem("employee_id",$(this).val());
     });
@@ -1029,7 +1023,7 @@
     });
     $("[name='end_date']").change(function(){
         localStorage.setItem("end_date",$(this).val());
-    }); 
+    });
     $("select[name='branch_id']").change(function(){
         localStorage.setItem("branch_id",$(this).val());
         localStorage.setItem("branch_name",$(this).find('option:selected').attr("name"));
@@ -1037,7 +1031,7 @@
     $("select[name='department_id']").change(function(){
         localStorage.setItem("department_id",$(this).val());
         localStorage.setItem("department_name",$(this).find('option:selected').attr("name"));
-    }); 
+    });
 
     $("#branch_id").on('select2:select', function(event) {
         let branch = event.params.data
@@ -1081,14 +1075,14 @@
         if($(this).is(':checked')){
             let id = $(this).attr('name');
             let value = $(this).val();
-            localStorage.setItem(id, value);    
+            localStorage.setItem(id, value);
         }
     });
     $('input[name="allowance_overtime"]').change(function() {
         if($(this).is(':checked')){
             let id = $(this).attr('name');
             let value = $(this).val();
-            localStorage.setItem(id, value);    
+            localStorage.setItem(id, value);
         }
     });
     $("select[name='payment_schedule']").change(function(){
@@ -1208,22 +1202,22 @@
         let get_SalaryType;
         $('input[name="salary_type"]').each(function() {
             let id = $(this).attr('name');
-            var radios = document.getElementsByName(id); 
-            get_SalaryType = localStorage.getItem(id); 
+            var radios = document.getElementsByName(id);
+            get_SalaryType = localStorage.getItem(id);
             for(var i=0;i<radios.length;i++){
                 if(radios[i].value == get_SalaryType){
-                    radios[i].checked = true; 
+                    radios[i].checked = true;
                 }
             }
         });
         let get_allowance_overtime;
         $('input[name="allowance_overtime"]').each(function() {
             let id = $(this).attr('name');
-            var radios = document.getElementsByName(id); 
-            get_allowance_overtime = localStorage.getItem(id); 
+            var radios = document.getElementsByName(id);
+            get_allowance_overtime = localStorage.getItem(id);
             for(var i=0;i<radios.length;i++){
                 if(radios[i].value == get_allowance_overtime){
-                    radios[i].checked = true; 
+                    radios[i].checked = true;
                 }
             }
         });
@@ -1273,14 +1267,15 @@
             $("[name='expired_identity']").val(get_expired_identity);
         }
         $("[name='postal_code']").val(get_postal_code);
-        $("[name='citizien_id_address']").html(get_citizien_id_address);
+        // $("[name='residential_address']").html(get_residential_address);
         if (get_checkbox_residential_address !== null) {
-            $("[name='citizien_id_address']").html(get_residential_address_copy);
+            $("[name='residential_address']").html(get_citizien_id_address);
             $("input[name='checkbox_residential_address']").attr("checked", "checked");
         }else{
-            $("[name='citizien_id_address']").html(get_citizien_id_address);
+            var get_residential_address          = localStorage.getItem("residential_address");
+            $("[name='residential_address']").html(get_residential_address);
         }
-        $("[name='residential_address']").html(get_residential_address);
+        $("[name='citizien_id_address']").html(get_citizien_id_address);
         $("[name='employee_id']").val(get_employee_id);
         $("[name='barcode']").val(get_barcode);
         $("[name='employee_status']").val(get_employee_status);
@@ -1292,21 +1287,21 @@
         $("select[name='job_position_id']").val(get_job_position_id);
         $("select[name='job_level_id']").val(get_job_level_id);
         $("select[name='schedule_id']").val(get_schedule_id);
-        $("select[name='approval_line_id']").val(get_approval_line_id); 
+        $("select[name='approval_line_id']").val(get_approval_line_id);
         var n1 = parseInt(get_basic_salary.replace(/\D/g, ''), 10) || '';
         $("[name='basic_salary']").val(n1.toLocaleString());
-        $("[name='payment_schedule']").val(get_payment_schedule); 
-        $("[name='preorate_setting']").val(get_preorate_setting); 
-        $("[name='cost_center_category']").val(get_cost_center_category); 
-        $("[name='bank_name']").val(get_bank_name); 
-        $("[name='account_holder_name']").val(get_account_holder_name); 
-        $("[name='account_number']").val(get_account_number); 
-        $("[name='npwp']").val(get_npwp); 
-        $("[name='ptkp_status']").val(get_ptkp_status); 
-        $("[name='tax_method']").val(get_tax_method); 
-        $("[name='tax_salary']").val(get_tax_salary); 
-        $("[name='taxable_date']").val(get_taxable_date); 
-        $("[name='employeement_tax_status']").val(get_employeement_tax_status); 
+        $("[name='payment_schedule']").val(get_payment_schedule);
+        $("[name='preorate_setting']").val(get_preorate_setting);
+        $("[name='cost_center_category']").val(get_cost_center_category);
+        $("[name='bank_name']").val(get_bank_name);
+        $("[name='account_holder_name']").val(get_account_holder_name);
+        $("[name='account_number']").val(get_account_number);
+        $("[name='npwp']").val(get_npwp);
+        $("[name='ptkp_status']").val(get_ptkp_status);
+        $("[name='tax_method']").val(get_tax_method);
+        $("[name='tax_salary']").val(get_tax_salary);
+        $("[name='taxable_date']").val(get_taxable_date);
+        $("[name='employeement_tax_status']").val(get_employeement_tax_status);
         var n2 = parseInt(get_netto.replace(/\D/g, ''), 10) || '';
         $("[name='netto']").val(n2.toLocaleString());
         var n3 = parseInt(get_pph21.replace(/\D/g, ''), 10) || '';
@@ -1319,7 +1314,7 @@
         $("[name='bpjs_kesehatan_cost']").val(get_bpjs_kesehatan_cost);
         $("[name='bpjs_jht_cost']").val(get_bpjs_jht_cost);
         $("[name='jaminan_pensiun_cost']").val(get_jaminan_pensiun_cost);
-        $("[name='jaminan_pensiun_date']").val(get_jaminan_pensiun_date); 
+        $("[name='jaminan_pensiun_date']").val(get_jaminan_pensiun_date);
         $("#fullname_view").html(get_first_name+" "+get_last_name);
         $("#email_view").html(get_email);
         $("#mobile_phone_view").html(get_mobile_phone);
@@ -1337,13 +1332,15 @@
         }else{
             $("#get_expired_identity_view").html(get_expired_identity);
         }
-        $("#get_postal_code_view").html(get_postal_code);   
-        $("#get_residential_address_view").html(get_residential_address);
+        $("#get_postal_code_view").html(get_postal_code);
+
+        // $("#get_residential_address_view").html(get_residential_address);
         if(get_checkbox_residential_address ==1){
-            $("#get_citizien_id_address_view").html(get_residential_address_copy);
+            $("#get_residential_address_view").html(get_citizien_id_address);
         }else{
-            $("#get_citizien_id_address_view").html(get_citizien_id_address);
+            $("#get_residential_address_view").html(get_residential_address);
         }
+        $("#get_citizien_id_address_view").html(get_citizien_id_address);
         $("#get_employe_id_view").html(get_employee_id);
         $("#get_barcode_view").html(get_barcode);
         $("#get_employee_status_view").html(get_employee_status);

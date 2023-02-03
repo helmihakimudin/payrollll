@@ -70,7 +70,7 @@
                         <div class="form-group">
                             <label>Effective as off*</label>
                             <div class="input-group date">
-                                <input type="text" id="effective_date" name="effective_date" class="form-control datepicker @error('effective_date') is-invalid @enderror" readonly="" id="kt_datepicker_3">
+                                <input type="text" id="effective_date" name="effective_date" class="form-control datepicker @error('effective_date') is-invalid @enderror" id="kt_datepicker_3">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="la la-calendar"></i>
@@ -86,7 +86,7 @@
                         <div class="form-group">
                             <label>Expired Date</label>
                             <div class="input-group date">
-                                <input type="text" id="expired_date" name="expired_date" class="form-control datepicker @error('expired_date') is-invalid @enderror" readonly="" id="kt_datepicker_3">
+                                <input type="text" id="expired_date" name="expired_date" class="form-control datepicker @error('expired_date') is-invalid @enderror" id="kt_datepicker_3">
                                 @error('expired_date')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror

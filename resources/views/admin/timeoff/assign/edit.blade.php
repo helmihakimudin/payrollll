@@ -23,14 +23,6 @@
                 <h3 class="kt-portlet__head-title">Transaction Time Off Detail</h3>
             </div>
             <div class="kt-portlet__head-toolbar">
-                <a href="#" class="btn btn-sm btn-outline-brand btn-elevate btn-icon-sm">
-                    <i class="la la-upload"></i>
-                    Import
-                </a>
-                <a href="#" class="btn mx-4 btn-sm btn-outline-brand btn-elevate btn-icon-sm">
-                    <i class="la la-download"></i>
-                    Export
-                </a>
                 <a href="{{ route('timeoff.assign')}}" class="btn btn-sm btn-outline-secondary btn-elevate btn-icon-sm">
                     <i class="la la-arrow-left"></i>
                     Back
@@ -42,34 +34,73 @@
                 @csrf
                 @method('put')
                 <div class="row">
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <label for="timeoff">Time Off </label>
-                            <select class="form-control" id="timeoff_id" name="timeoff_id" @error('timeoff_id') is-invalid @enderror>
-                                <option value="" disabled selected>Select your option</option>
-                                @foreach ($timeoff as $item)
-                                     <option value="{{$item->id}}" {{$item->id == $timeoffemployee->timeoff_id ? 'selected' : ''}}>{{$item->code}} | {{$item->name}}</option>
-                                @endforeach                                
-                            </select>
+                    <div class="col-lg-9">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="timeoff">Time Off </label>
+                                    <select class="form-control" id="timeoff_id" name="timeoff_id" @error('timeoff_id') is-invalid @enderror>
+                                        <option value="" disabled selected>Select your option</option>
+                                        @foreach ($timeoff as $item)
+                                            <option value="{{$item->id}}" {{$item->id == $timeoffemployee->timeoff_id ? 'selected' : ''}}>{{$item->code}} | {{$item->name}}</option>
+                                        @endforeach                                
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="type">Type </label>
+                                    <select class="form-control" id="type" name="type" @error('type') is-invalid @enderror>
+                                        <option value="" disabled selected>Select your option</option>
+                                        <option value="assign_update" {{$timeoffemployee->type == "assign_update" ? 'selected' : ''}}>Assign</option>
+                                        <option value="assign_update" {{$timeoffemployee->type == "update" ? 'selected' : ''}}>Update</option>
+                                        <option value="expired" {{$timeoffemployee->type == "expired" ? 'selected' : ''}}>Expired</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <input type="text" value="{{old('description', $timeoffemployee->description)}}" class="form-control" id="description" name="description" @error('description') is-invalid @enderror>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 el-none1">
+                                <div class="form-group">
+                                    <label>Input balance</label>
+                                    <input type="number" value="{{$timeoffemployee->input_balance}}" class="form-control" maxlength="2" placeholder="1" id="input_balance" name="input_balance" @error('input_balance') is-invalid @enderror>
+                                </div>
+                            </div>
+                            @php
+                                use Carbon\Carbon;
+                            @endphp
+                            <div class="col-lg-4 el-none1">
+                                <div class="form-group">
+                                    <label>Start Date</label>
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control" value="{{Carbon::parse($timeoffemployee->start_date)->format('d/m/Y')}}" id="kt_datepicker_3" name="start_date" @error('start_date') is-invalid @enderror>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="la la-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 el-none1">
+                                <div class="form-group">
+                                    <label>End Date</label>
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control" value="{{Carbon::parse($timeoffemployee->end_date)->format('d/m/Y')}}" id="kt_datepicker_3" name="end_date" @error('end_date') is-invalid @enderror>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="la la-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <label for="type">Type </label>
-                            <select class="form-control" id="type" name="type" @error('type') is-invalid @enderror>
-                                <option value="" disabled selected>Select your option</option>
-                                <option value="assign_update" {{$timeoffemployee->type == "assign_update" ? 'selected' : ''}}>Assign or Update</option>
-                                <option value="expired" {{$timeoffemployee->type == "expired" ? 'selected' : ''}}>Expired</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <label>Description</label>
-                            <input type="text" value="{{old('description', $timeoffemployee->description)}}" class="form-control" id="description" name="description" @error('description') is-invalid @enderror>
-                        </div>
-                    </div>
-                    
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label>Select Employee <span class="text-danger">*</span></label>
@@ -86,44 +117,11 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-3 el-none1">
-                        <div class="form-group">
-                            <label>Input balance</label>
-                            <input type="text" value="{{$timeoffemployee->input_balance}}" class="form-control" maxlength="2" placeholder="1" id="input_balance" name="input_balance" @error('input_balance') is-invalid @enderror>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 el-none1">
-                        <div class="form-group">
-                            <label>Start Date</label>
-                            <div class="input-group date">
-                                <input type="text" class="form-control" value="{{$timeoffemployee->start_date}}" readonly="" id="kt_datepicker_3" name="start_date" @error('start_date') is-invalid @enderror>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="la la-calendar"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 el-none1">
-                        <div class="form-group">
-                            <label>End Date</label>
-                            <div class="input-group date">
-                                <input type="text" class="form-control" value="{{$timeoffemployee->end_date}}" readonly="" id="kt_datepicker_3" name="end_date" @error('end_date') is-invalid @enderror>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="la la-calendar"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
                     <div class="col-lg-12 text-right">
                         <hr>
                         <div class="kt-form__actions">
                             <button type="submit" class="btn btn-success">Update</button>
-                            <button type="reset" class="btn btn-secondary">Cancel</button>
+                            <a href="{{ route('timeoff.assign')}}" type="reset" class="btn btn-secondary">Cancel</a>
                         </div>
                     </div>
                 </div>

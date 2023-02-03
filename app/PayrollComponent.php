@@ -24,7 +24,7 @@ class PayrollComponent extends Model
     //     foreach($tempEmpComponent as $row){
     //         $total_allowance += $row->amount;
     //     }
-    
+
     //     $total = $total_allowance + $employee->basic_salary;
     //     return $total;
     // }
@@ -41,14 +41,14 @@ class PayrollComponent extends Model
     //     foreach($tempEmpComponent as $row){
     //         $totaldeduction += $row->amount;
     //     }
-        
+
     //     $employee  = Employee::find($id);
     //     $totaltotalbpjs = 0;
     //     $totaltotalbpjs = $employee->bpjs_kesehatan_cost + $employee->bpjs_jht_cost + $employee->jaminan_pensiun_cost;
     //     $total = $totaldeduction + $totaltotalbpjs;
     //     return $total;
     // }
-    
+
     // public static function allowanceList($id, $transaksi_id){
     //     $tempEmpComponent = TempEmpComponent::join('component','temp_emp_component.component_id','=','component.id')
     //                     ->join('employees','temp_emp_component.employee_id','=','employees.id')
@@ -76,5 +76,5 @@ class PayrollComponent extends Model
 
     //     return $listdeductions;
     // }
-   
+
 }

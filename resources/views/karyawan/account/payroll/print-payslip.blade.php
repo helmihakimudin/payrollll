@@ -66,8 +66,8 @@
     }
     #td-table{
         vertical-align:top;
-        padding:3px; 
-   
+        padding:3px;
+
     }
     #four-section{
         display: inline-block;
@@ -89,7 +89,7 @@
         height:11%;
         font-family: Arial, Helvetica, sans-serif;
 
-        
+
     }
 
     #thead-lights{
@@ -118,7 +118,7 @@
         font-family: Arial, Helvetica, sans-serif;
         border: 1px solid;
         border-color: #e2e2e2;
-        
+
     }
     #five-section-left{
         display: inline-block;
@@ -144,7 +144,7 @@
         display: inline-block;
         margin-top:25px;
         font-size:15px;
-        font-family: Arial, Helvetica, sans-serif;      
+        font-family: Arial, Helvetica, sans-serif;
     }
     #six-section-left{
         display: inline-block;
@@ -194,7 +194,7 @@
         <img src="{{ public_path('logo/duasisi.png')}}" width="100%" alt="">
     </div>
     <div id="section-first-title">
-        *COFINDENTAL
+        *CONFIDENTIAL
     </div>
 </div>
 
@@ -212,16 +212,16 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <td id="td-table">Payroll Cut Off</td><td id="td-table">:</td><td id="td-table">26 Jan - 25 Feb 2022</td>
+                        <td id="td-table">Payroll Cut Off</td><td id="td-table">:</td><td id="td-table">26 {{\Carbon\Carbon::parse($payslip->salary_month)->subMonth(1)->format("F Y")}} - 25 {{\Carbon\Carbon::parse($payslip->salary_month)->format("F Y")}}</td>
                     </tr>
                     <tr>
-                        <td id="td-table">ID / Name </td><td id="td-table">:</td><td id="td-table">TADS001 / Sakti Tua petrus Davici Banjarnahor</td>
+                        <td id="td-table">ID / Name </td><td id="td-table">:</td><td id="td-table">{{$employee->employee_id}} / {{$employee->full_name}}</td>
                     </tr>
                     <tr>
-                        <td id="td-table">Organization </td><td id="td-table">:</td><td id="td-table">TADS</td>
+                        <td id="td-table">Organization </td><td id="td-table">:</td><td id="td-table">{{$employee->organization->name}}</td>
                     </tr>
                     <tr>
-                        <td id="td-table">Grade / Level </td><td id="td-table">:</td><td id="td-table">- / Supervisor</td>
+                        <td id="td-table">Grade / Level </td><td id="td-table">:</td><td id="td-table">{{$employee->jobLevel->name}}</td>
                     </tr>
                 <tbody>
             </table>
@@ -230,20 +230,25 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <td id="td-table">Job Position</td><td id="td-table">:</td><td id="td-table">Programmer Supervisor</td>
+                        <td id="td-table">Job Position</td><td id="td-table">:</td><td id="td-table">{{$employee->jobPosition->name}}</td>
                     </tr>
                     <tr>
-                        <td id="td-table">PTKP</td><td id="td-table">:</td><td id="td-table">TK/0</td>
+                        <td id="td-table">PTKP</td><td id="td-table">:</td><td id="td-table">{{$employee->ptkp_status}}</td>
                     </tr>
                     <tr>
-                        <td id="td-table">NPWP </td><td id="td-table">:</td><td id="td-table">00.000.000.0000</td>
+                        <td id="td-table">NPWP </td><td id="td-table">:</td><td id="td-table">{{$employee->npwp}}</td>
                     </tr>
-                   
+
                 <tbody>
             </table>
         </div>
      </div>
-
+     @php
+        $jsonAllowance = json_decode($payslip->allowance);
+        $jsonDeduction = json_decode($payslip->deduction);
+        $total_allowance = (int)$employee->basic_salary;
+        $total_deductions = 0;
+    @endphp
      <div id="four-section">
         <div id="four-section-left">
             <table  id="border-table-1" width="100%">
@@ -253,14 +258,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="font-arial"><small>Basic Salary</small></td><td style="text-align:right;"><small>Rp. 3.500.000</small></td>
-                    </tr>
-                    <tr>
-                        <td class="font-arial"><small>Tunjangan Jabatan</small></td><td style="text-align:right;"><small>Rp.1.500.000</small></td>
-                    </tr>
+                    @php
+                        foreach($jsonAllowance as $rows)
+                        {
+                            $total_allowance += empty($rows->amount) ? 0 : (int)$rows->amount;
+                        }
+                    @endphp
+                        <tr>
+                            <td class="font-arial"><small>Basic Salary</small></td><td style="text-align:right;"><small>Rp. {{number_format($employee->basic_salary)}}</small></td>
+                        </tr>
+                    @foreach($jsonAllowance as $rows)
+                        <tr>
+                            <td class="font-arial"><small>{{$rows->component}}</small></td><td style="text-align:right;"><small>@currency($rows->amount)</small></td>
+                        </tr>
+                    @endforeach
                 </tbody>
-            </table> 
+            </table>
         </div>
         <div id="four-section-right">
             <table id="border-table-1" width="100%">
@@ -270,20 +283,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td> <small>BPJS kesehatan</small></td><td style="text-align:right;"><small>Rp. 25.000</small></td>
-                    </tr>
-                    <tr>
-                        <td><small>JHT Employee</small></td><td style="text-align:right;"><small>Rp.230.00</small></td>
-                    </tr>
-                    <tr>
-                        <td><small>Potongan Keterlambatan</small></td><td style="text-align:right;"><small>Rp.94.000</small></td>
-                    </tr>
-                    <tr>
-                        <td><small>Potongan Pph 21</small></td><td style="text-align:right;"><small>Rp.750.000</small></td>
-                    </tr>
+                    @php
+                        foreach($jsonDeduction as $rows)
+                        {
+                            $total_deductions += empty($rows->amount) ? 0 : (int)$rows->amount;
+                        }
+                    @endphp
+                    @foreach($jsonDeduction as $rows)
+                        <tr>
+                            <td> <small>{{$rows->component}}</small></td><td style="text-align:right;"><small>@currency($rows->amount)</small></td>
+                        </tr>
+                    @endforeach
                 </tbody>
-            </table> 
+            </table>
         </div>
      </div>
 
@@ -292,19 +304,19 @@
             <table  id="border-table-1" width="100%">
                 <tbody>
                     <tr>
-                        <td class="font-arial-bold"><small>Total Earnings</small></td><td style="text-align:right;" class="font-arial-bold"><small>Rp. 5.000.000</small></td>
+                        <td class="font-arial-bold"><small>Total Earnings</small></td><td style="text-align:right;" class="font-arial-bold"><small>@currency($total_allowance)</small></td>
                     </tr>
                 </tbody>
-            </table> 
+            </table>
         </div>
         <div id="five-section-right">
             <table id="border-table-1" width="100%">
                 <tbody>
                     <tr>
-                        <td class="font-arial-bold"><small>Total Deductions</small></td><td style="text-align:right;" class="font-arial-bold"><small>Rp. 5.000.000</small></td>
+                        <td class="font-arial-bold"><small>Total Deductions</small></td><td style="text-align:right;" class="font-arial-bold"><small>@currency($total_deductions)</small></td>
                     </tr>
                 </tbody>
-            </table> 
+            </table>
         </div>
      </div>
 
@@ -316,16 +328,16 @@
                         &nbsp;
                     </tr>
                 </tbody>
-            </table> 
+            </table>
         </div>
         <div id="six-section-right">
             <table id="border-table-1" width="100%">
                 <tbody>
                     <tr>
-                        <td class="font-arial-bold-px"><small>Take Home Pays</small></td><td style="text-align:right;" class="font-arial-bold-px"><small>Rp. 4.130.000</small></td>
+                        <td class="font-arial-bold-px"><small>Take Home Pays</small></td><td style="text-align:right;" class="font-arial-bold-px"><small>@currency($total_allowance-$total_deductions)</small></td>
                     </tr>
                 </tbody>
-            </table> 
+            </table>
         </div>
      </div>
 
@@ -351,7 +363,7 @@
                         <td class="font-arial"><small>BPJS Kesehatan Company</small></td><td style="text-align:right;"><small>Rp. 280.000</small></td>
                     </tr>
                 </tbody>
-            </table> 
+            </table>
         </div>
         <div id="seven-section-right">
             <table id="border-table-1" width="100%">
@@ -380,7 +392,7 @@
                         <td><small>Attendance / Time Off Code</small></td><td style="text-align:right;"><small>H:17 CT:2</small></td>
                     </tr>
                 </tbody>
-            </table> 
+            </table>
         </div>
      </div>
 

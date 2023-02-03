@@ -33,7 +33,7 @@
                     </div>
                     <div class="form-group">
                         <label >Choose Access :</label>
-                        <select class="form-control select-custom"  style="width:100%;" id="permission_id" name="permission_id[]" multiple="multiple" required>
+                        <select class="form-control select-custom"  style="width:100%;" id="permission_id" name="permission_id[]" multiple="multiple">
                             <option value="">Select Access</option>
                             @foreach(DB::table('permissions')->get() as $row)
                             <option value="{{$row->id}}">{{$row->name}}</option>

@@ -15,7 +15,13 @@
         display: none;
     }
 
-</style>            
+    #alert_err{
+        background-color: transparent;
+        color: red;
+        border: red;
+    }
+
+</style>
 @endpush
 @section('content')
     <div class="kt-portlet">
@@ -24,14 +30,6 @@
                 <h3 class="kt-portlet__head-title">Transaction Time Off Detail</h3>
             </div>
             <div class="kt-portlet__head-toolbar">
-                <a href="#" class="btn btn-sm btn-outline-brand btn-elevate btn-icon-sm">
-                    <i class="la la-upload"></i>
-                    Import
-                </a>
-                <a href="#" class="btn mx-4 btn-sm btn-outline-brand btn-elevate btn-icon-sm">
-                    <i class="la la-download"></i>
-                    Export
-                </a>
                 <a href="{{ route('timeoff.assign')}}" class="btn btn-sm btn-outline-secondary btn-elevate btn-icon-sm">
                     <i class="la la-arrow-left"></i>
                     Back
@@ -42,46 +40,83 @@
             <form class="kt-form" action="{{route('timeoff.assign.store')}}" method="POST">
                 @csrf
                 <div class="row">
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <label for="timeoff">Time Off </label>
-                            <select class="form-control" id="timeoff_id" name="timeoff_id" @error('timeoff_id') is-invalid @enderror>
-                                <option value="" disabled selected>Select your option</option>
-                                @foreach ($timeoff as $item)
-                                     <option value="{{$item->id}}">{{$item->code}} | {{$item->name}}</option>
-                                @endforeach                                
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <label for="type">Type </label>
-                            <select class="form-control" id="type" name="type" @error('type') is-invalid @enderror>
-                                <option value="" disabled selected>Select your option</option>
-                                <option value="assign_update">Assign or Update</option>
-                                <option value="expired">Expired</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <label>Description</label>
-                            <input type="text" class="form-control" id="description" name="description" @error('description') is-invalid @enderror>
-                        </div>
-                    </div>
-                    {{-- <div class="col-lg-3 el-none2">
-                        <div class="form-group">
-                            <label>Effective Expired Date</label>
-                            <div class="input-group date">
-                                <input type="text" class="form-control" readonly="" id="kt_datepicker_3" name="start_date">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="la la-calendar"></i>
-                                    </span>
+                    <div class="col-lg-9">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="timeoff">Time Off </label>
+                                    <select class="form-control" id="timeoff_id" name="timeoff_id" @error('timeoff_id') is-invalid @enderror>
+                                        <option value="" disabled selected>Select your option</option>
+                                        @foreach ($timeoff as $item)
+                                            <option value="{{$item->id}}">{{$item->code}} | {{$item->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="type">Type </label>
+                                    <select class="form-control" id="type" name="type" @error('type') is-invalid @enderror>
+                                        <option value="" disabled selected>Select your option</option>
+                                        <option value="assign_update">Assign</option>
+                                        <option value="update">Update</option>
+                                        <option value="expired">Expired</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <input type="text" class="form-control" id="description" name="description" @error('description') is-invalid @enderror>
+                                </div>
+                            </div>
+                            {{-- <div class="col-lg-4 el-none2">
+                                <div class="form-group">
+                                    <label>Effective Expired Date</label>
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control" readonly="" id="kt_datepicker_3" name="start_date">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="la la-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> --}}
+                            <div class="col-lg-4 el-none1">
+                                <div class="form-group">
+                                    <label>Input balance</label>
+                                    <input type="number" class="form-control" maxlength="2" placeholder="1" id="input_balance" name="input_balance" @error('input_balance') is-invalid @enderror>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 el-none1">
+                                <div class="form-group">
+                                    <label>Start Date</label>
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control" id="kt_datepicker_3" name="start_date" @error('start_date') is-invalid @enderror>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="la la-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 el-none1">
+                                <div class="form-group">
+                                    <label>End Date</label>
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control" id="kt_datepicker_3" name="end_date" @error('end_date') is-invalid @enderror>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="la la-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label>Select Employee <span class="text-danger">*</span></label>
@@ -90,53 +125,22 @@
                             </div>
                             {{-- <select class="form-control kt-select2" id="select-employee" name="employee_id[]" data-tags="true" multiple="multiple" style="width:100%" @error('employee_id') is-invalid @enderror>
                                 @foreach ($employee as $item)
-                                    <option value="{{$item->id}}">{{$item->full_name}}<option>                                    
+                                    <option value="{{$item->id}}">{{$item->full_name}}<option>
                                 @endforeach
                             </select> --}}
                             <select class="form-control kt-select2" id="select-employee" name="employee_id[]" data-tags="true" multiple="multiple" style="width:100%" @error('employee_id') is-invalid @enderror>
-                               
+                                @foreach ($employee as $key => $item)
+                                    <option value="{{$item->id}}">{{$item->full_name}} <span></option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-3 el-none1">
-                        <div class="form-group">
-                            <label>Input balance</label>
-                            <input type="number" class="form-control" maxlength="2" placeholder="1" id="input_balance" name="input_balance" @error('input_balance') is-invalid @enderror>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 el-none1">
-                        <div class="form-group">
-                            <label>Start Date</label>
-                            <div class="input-group date">
-                                <input type="text" class="form-control" readonly="" id="kt_datepicker_3" name="start_date" @error('start_date') is-invalid @enderror>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="la la-calendar"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 el-none1">
-                        <div class="form-group">
-                            <label>End Date</label>
-                            <div class="input-group date">
-                                <input type="text" class="form-control" readonly="" id="kt_datepicker_3" name="end_date" @error('end_date') is-invalid @enderror>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="la la-calendar"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-12 text-right">
-                        <hr>
-                        <div class="kt-form__actions">
-                            <button type="submit" class="btn btn-success">Save</button>
-                            <button type="reset" class="btn btn-secondary">Cancel</button>
-                        </div>
+                </div>
+                <div class="col-lg-12 text-right">
+                    <hr>
+                    <div class="kt-form__actions">
+                        <button type="submit" class="btn btn-success">Save</button>
+                        <a href="{{ route('timeoff.assign')}}" type="reset" class="btn btn-secondary">Cancel</a>
                     </div>
                 </div>
             </form>
@@ -157,7 +161,7 @@ var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
                     var span = $("<span value="+a.id+" style='font-weight:bold'>"+a.text+"<br><small>"+a.employee_id + ' - ' + a.jp_name+"</small></span>");
                     return span;
                 },
-                ajax: { 
+                ajax: {
                 url: "{{route('getEmployees')}}",
                 type: "post",
                 dataType: 'json',
@@ -181,11 +185,23 @@ var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
         });
 
+        function formatDateIndex(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+
+            return [day, month, year].join('/');
+            }
+
 
 // $(document).ready(function() {
-    
+
 //     $("#select-emsployee").select2({
-        
+
 //         templateResult: function(idioma) {
 //             var span = $("<span>"+idioma.text+"</span>");
 //             return span;
@@ -206,27 +222,6 @@ var selectAll = true;
             });
         }
     }
-
-        function selectAllEmployee() {
-        if(selectAll){
-            $("#select-employee > option").prop("selected", true);
-            $("#select-employee").trigger("change"); 
-            selectAll = false;
-        }else{
-            $("#select-employee > option").prop("selected", false);
-            $("#select-employee").trigger("change"); 
-            selectAll = true;
-        }
-    }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -259,15 +254,15 @@ var selectAll = true;
     // function selectAllEmployee() {
     //     if(selectAll){
     //         $("#select-employee > option").prop("selected", true);
-    //         $("#select-employee").trigger("change"); 
+    //         $("#select-employee").trigger("change");
     //         selectAll = false;
     //     }else{
     //         $("#select-employee > option").prop("selected", false);
-    //         $("#select-employee").trigger("change"); 
+    //         $("#select-employee").trigger("change");
     //         selectAll = true;
     //     }
     // }
-    
+
 
     // jQuery(document).ready(function() {
 
@@ -292,8 +287,8 @@ var selectAll = true;
         //     templateResult: function (d) { return $(setTemplate(d.title, d.description)); },
         //     templateSelection: function (d) { return d.title },
         // }).on('change', function() {
-            
-        // }).trigger('change'); 
+
+        // }).trigger('change');
 
         // $("#clear").on("click", function () {
         //     $example.select2("destroy");

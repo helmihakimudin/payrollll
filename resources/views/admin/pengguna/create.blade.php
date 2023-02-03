@@ -56,12 +56,12 @@
                             <input type="email" name="email" id="user_email" class="form-control" autocomplete="off" required readonly>
                         </div>
                         <div class="form-group">
-                            <label class="form-control-label" >Password:</label>
-                            <input type="password" name="password" class="form-control" autocomplete="off" required>
+                            <!-- <label class="form-control-label" >Password:</label> -->
+                            <input type="hidden" name="password" class="form-control" id="password" autocomplete="off" readonly>
                         </div>
                         <div class="form-group">
                             <label >Rules :</label>
-                            <select class="form-control select2"  style="width:100%;" id="type" name="type" required>
+                            <select class="form-control select2"  style="width:100%;" id="type" name="type">
                                 <option value="">Choose Rules</option>
                                 @foreach(DB::table('roles')->get() as $row)
                                 <option value="{{$row->id}}">{{$row->name}}</option>
@@ -197,11 +197,11 @@
             _token:"{{ csrf_token() }}",
             success: function (data) {  
 				var dataParse = JSON.parse(data);
-                console.log(dataParse);
 				if (dataParse.length != 0) {
 					$('#mobile_phone').val(dataParse.mobile_phone);
                     $("#branch_id_user").val(dataParse.branch_id).trigger("change");
 					$('#user_email').val(dataParse.email);
+                    $('#password').val(dataParse.password);
                 }
             }
         });

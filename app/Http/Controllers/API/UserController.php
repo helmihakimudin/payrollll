@@ -22,8 +22,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         // return $request->user();
-        $user = $request->user();
-        $employee = Employee::where('user_id', $user->id)->first();
+        $employee = Employee::where('user_id', $request->user()->id)->first();
 
         // dd($employee->id);
         // return new EmployeeCollection($employee);

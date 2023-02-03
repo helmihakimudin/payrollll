@@ -2,6 +2,15 @@
 	'pages'=>'general',
 	'subpages'=>'personality'
 ])
+
+@push('css')
+<style>
+  .select2-container {
+    display: block;
+    width: 100%;
+  }
+</style>            
+@endpush
 @section('content-account')
 <div class="kt-portlet">
     <div class="kt-portlet__head">
@@ -10,10 +19,8 @@
                 Personal
             </h3>
         </div>
-    </div>
-    <div class="kt-portlet__body">
-        <div class="tab-content kt-margin-t-5">
-            <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
+        <div class="kt-portlet__head-toolbar">
+            <ul class="nav nav-tabs nav-tabs-bold nav-tabs-line nav-tabs-line-right nav-tabs-line-brand" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" data-toggle="tab" href="#kt_apps_contacts_view_tab_1" role="tab">
                          Basic Info
@@ -30,89 +37,101 @@
                     </a>
                 </li>
             </ul>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+        <div class="tab-content">
             <div class="tab-pane active" id="kt_apps_contacts_view_tab_1" role="tabpanel">
                 <div class="row">
                     <div class="col-lg-4">
                         <span class="font-weight-bold"> Personal Data </span><br>
-                        <span style="font-size:11px;">Your email address is your identity on Talenta is used to log in.</span>
+                        <span style="font-size:11px;">Your email address is your identity on E-Smart is used to log in.</span>
                     </div>
                     <div class="col-lg-6">
                         <ul class="list-unstyled mb-0">
                             <li>
                                 <div class="row py-2">
-                                        <div class="col-sm-4 d-flex align-items-center">
-                                            <span class="font-weight-bold"> Full name </span>
-                                        </div>
-                                    <div class="col-sm-8"><p>{{$karyawan->full_name}}</p></div>
+                                    <div class="col-sm-4 d-flex align-items-center">
+                                        <span class="font-weight-bold"> Full name </span>
+                                    </div>
+                                    <div class="col-sm-8"><p class="m-0">{{$karyawan->full_name}}</p></div>
                                 </div>
                             </li>
                             <li>
                                 <div class="row py-2">
-                                        <div class="col-sm-4 d-flex align-items-center">
-                                            <span class="font-weight-bold"> Mobile phone </span>
-                                        </div>
-                                    <div class="col-sm-8"><p>{{$karyawan->phone}}</p></div>
+                                    <div class="col-sm-4 d-flex align-items-center">
+                                        <span class="font-weight-bold"> Phone Number (Home) </span>
+                                    </div>
+                                    <div class="col-sm-8"><p class="m-0">{{$karyawan->phone}}</p></div>
                                 </div>
                             </li>
                             <li>
                                 <div class="row py-2">
-                                        <div class="col-sm-4 d-flex align-items-center">
-                                            <span class="font-weight-bold"> Mobile phone </span>
-                                        </div>
-                                    <div class="col-sm-8"><p>{{$karyawan->mobile_phone}}</p></div>
+                                    <div class="col-sm-4 d-flex align-items-center">
+                                        <span class="font-weight-bold"> Mobile phone </span>
+                                    </div>
+                                    <div class="col-sm-8"><p class="m-0">{{$karyawan->mobile_phone}}</p></div>
                                 </div>
                             </li>
                             <li>
                                 <div class="row py-2">
-                                        <div class="col-sm-4 d-flex align-items-center">
-                                            <span class="font-weight-bold"> Email </span>
-                                        </div>
-                                    <div class="col-sm-8"><p>{{$karyawan->email}}</p></div>
+                                    <div class="col-sm-4 d-flex align-items-center">
+                                        <span class="font-weight-bold"> Email </span>
+                                    </div>
+                                    <div class="col-sm-8"><p class="m-0">{{$karyawan->email}}</p></div>
                                 </div>
                             </li>
                             <li>
                                 <div class="row py-2">
-                                        <div class="col-sm-4 d-flex align-items-center">
-                                            <span class="font-weight-bold">Place Of Birth</span>
-                                        </div>
-                                    <div class="col-sm-8"><p>{{$karyawan->place_of_birth}}</p></div>
+                                    <div class="col-sm-4 d-flex align-items-center">
+                                        <span class="font-weight-bold">Place Of Birth</span>
+                                    </div>
+                                    <div class="col-sm-8"><p class="m-0">{{$karyawan->place_of_birth}}</p></div>
                                 </div>
                             </li>
                             <li>
                                 <div class="row py-2">
-                                        <div class="col-sm-4 d-flex align-items-center">
-                                            <span class="font-weight-bold">Date of Birth</span>
-                                        </div>
-                                    <div class="col-sm-8"><p>{{date('d M Y',strtotime($karyawan->date_of_birth))}}&nbsp;<span class="kt-badge kt-badge--pill  kt-badge--danger kt-badge--inline">{{$age}} years old</span></p></div>
+                                    <div class="col-sm-4 d-flex align-items-center">
+                                        <span class="font-weight-bold">Date of Birth</span>
+                                    </div>
+                                    <div class="col-sm-8"><p class="m-0">{{date('d M Y',strtotime($karyawan->date_of_birth))}} <span class="ml-2 text-warning kt-font-bold kt-badge--inline">( {{$age}} years old )</span></p></div>
                                 </div>
                             </li>
                             <li>
                                 <div class="row py-2">
-                                        <div class="col-sm-4 d-flex align-items-center">
-                                            <span class="font-weight-bold">Merriage status</span>
-                                        </div>
-                                    <div class="col-sm-8"><p> {{$karyawan->marital_status}}</p></div>
+                                    <div class="col-sm-4 d-flex align-items-center">
+                                        <span class="font-weight-bold">Blood Type</span>
+                                    </div>
+                                    <div class="col-sm-8"><p class="m-0"> {{$karyawan->blood_type}}</p></div>
                                 </div>
                             </li>
                             <li>
                                 <div class="row py-2">
-                                        <div class="col-sm-4 d-flex align-items-center">
-                                            <span class="font-weight-bold">Religion</span>
-                                        </div>
-                                    <div class="col-sm-8"><p> {{$karyawan->religion}}</p></div>
+                                    <div class="col-sm-4 d-flex align-items-center">
+                                        <span class="font-weight-bold">Merriage status</span>
+                                    </div>
+                                    <div class="col-sm-8"><p class="m-0"> {{$karyawan->marital_status}}</p></div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row py-2">
+                                    <div class="col-sm-4 d-flex align-items-center">
+                                        <span class="font-weight-bold">Religion</span>
+                                    </div>
+                                    <div class="col-sm-8"><p class="m-0"> {{$karyawan->religion}}</p></div>
                                 </div>
                             </li>
                         </ul>
                     </div>
                     @if($karyawan->is_req_personal == 1)
                     <div class="col-lg-2">
-                        <button type="button" data-attr="{{route("employee.account.personal.request.edit",$karyawan->id)}}" class="btn btn-light btn-elevate-hover btn-pill btn-edit-personal"><i class="la la-edit"></i>Request Edit</button>  
+                        <button type="button" data-attr="{{route("employee.account.personal.request.edit",$karyawan->id)}}" class="btn btn-outline-secondary btn-sm btn-elevate-hover btn-edit-personal"><i class="la la-edit"></i>Request Edit</button>
                     </div>
                     @endif
                 </div>
                 <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
                 <div class="row">
-                    <div class="col-lg-4">   
+                    <div class="col-lg-4">
                         <span class="font-weight-bold">Identity & Address</span><br>
                     </div>
                     <div class="col-lg-6">
@@ -122,7 +141,7 @@
                                         <div class="col-sm-4 d-flex align-items-center">
                                             <span class="font-weight-bold"> ID TYPE </span>
                                         </div>
-                                    <div class="col-sm-8"><p>{{$karyawan->identity_type}}</p></div>
+                                    <div class="col-sm-8"><p class="m-0">{{$karyawan->identity_type}}</p></div>
                                 </div>
                             </li>
                             <li>
@@ -130,15 +149,7 @@
                                         <div class="col-sm-4 d-flex align-items-center">
                                             <span class="font-weight-bold"> ID Number </span>
                                         </div>
-                                    <div class="col-sm-8"><p>{{$karyawan->identity_number}}</p></div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="row py-2">
-                                        <div class="col-sm-4 d-flex align-items-center">
-                                            <span class="font-weight-bold"> ID expiration date </span>
-                                        </div>
-                                    <div class="col-sm-8"><p>{{$karyawan->expired_identity}}</p></div>
+                                    <div class="col-sm-8"><p class="m-0">{{$karyawan->identity_number}}</p></div>
                                 </div>
                             </li>
                             <li>
@@ -146,7 +157,7 @@
                                         <div class="col-sm-4 d-flex align-items-center">
                                             <span class="font-weight-bold"> Postal code </span>
                                         </div>
-                                    <div class="col-sm-8"><p>{{$karyawan->postal_code}}</p></div>
+                                    <div class="col-sm-8"><p class="m-0">{{$karyawan->postal_code}}</p></div>
                                 </div>
                             </li>
                             <li>
@@ -154,7 +165,7 @@
                                         <div class="col-sm-4 d-flex align-items-center">
                                             <span class="font-weight-bold"> Citizen ID address</span>
                                         </div>
-                                    <div class="col-sm-8"><p>{{$karyawan->citizien_id_address}}</p></div>
+                                    <div class="col-sm-8"><p class="m-0">{{$karyawan->citizien_id_address}}</p></div>
                                 </div>
                             </li>
                             <li>
@@ -162,11 +173,16 @@
                                         <div class="col-sm-4 d-flex align-items-center">
                                             <span class="font-weight-bold"> Residential address</span>
                                         </div>
-                                    <div class="col-sm-8"><p>{{$karyawan->residential_address}}</p></div>
+                                    <div class="col-sm-8"><p class="m-0">{{$karyawan->residential_address}}</p></div>
                                 </div>
                             </li>
                         </ul>
                     </div>
+                    @if($karyawan->is_req_identity == 1)
+                    <div class="col-lg-2">
+                        <button type="button" data-attr="{{route("employee.account.identity.request.edit",$karyawan->id)}}" class="btn btn-outline-secondary btn-elevate-hover btn-sm rounded btn-edit-personal"><i class="la la-edit"></i>Request Edit</button>
+                    </div>
+                    @endif
                 </div>
             </div>
             <div class="tab-pane" id="kt_apps_contacts_view_tab_2" role="tabpanel">
@@ -180,7 +196,7 @@
                         <div class="kt-portlet__head-toolbar">
                             <a href="javascript:;" data-attr="{{route('employee.account.personal.family.create',$karyawan->id)}}" class="btn btn-default  btn-icon-sm btn-sm btn-add-family">
                                 <i class="la la-list"></i>
-                                Add 
+                                Add
                             </a>
                         </div>
                     </div>
@@ -202,7 +218,7 @@
                             </tbody>
                         </table>
                     </div>
-    
+
                 </div>
             </div>
             <div class="tab-pane" id="kt_apps_contacts_view_tab_3" role="tabpanel">
@@ -216,7 +232,7 @@
                         <div class="kt-portlet__head-toolbar">
                             <a href="javascript:;" data-attr="{{route('employee.account.personal.emergency.create',$karyawan->id)}}" class="btn btn-default  btn-icon-sm btn-sm btn-add-emergency">
                                 <i class="la la-list"></i>
-                                Add 
+                                Add
                             </a>
                         </div>
                     </div>
@@ -234,14 +250,14 @@
                             </tbody>
                         </table>
                     </div>
-    
+
                 </div>
             </div>
         </div>
     </div>
     <!--end::Form-->
 </div>
-@php 
+@php
 $karyawanid = $karyawan->id;
 @endphp
 @endsection
@@ -437,6 +453,16 @@ $(document).on('click','.btn-edit-personal',function(e){
 });
 
 
+$(document).on('click','#reject-request',function() {
+    swal.fire({
+        title: 'Auto close alert!',
+        text: 'I will close in 5 seconds.',
+        timer: 2000,
+        position: 'center',
+        type: 'error',
+        showConfirmButton: false,
+    })
+});
 
 </script>
 @endpush

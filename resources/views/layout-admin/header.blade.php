@@ -8,6 +8,17 @@
 @else
 @php $avatar = asset('image/avatar-uknown.png'); @endphp
 @endif
+
+@php
+//get employee by login user id
+$employee = \App\Employee::where(['user_id'=> Auth::user()->id])->first();
+
+//get inbox by user id
+$inbox = \App\Inbox::where('request_to', $employee->id)->orderBy('id', 'desc')->limit(4)->get();
+
+//get total unread
+$totalInboxByEmployee = \App\Inbox::where('request_to', $employee->id)->where('status_read',0)->count();
+@endphp
 <!-- begin:: Header -->
 <div id="kt_header" class="kt-header kt-grid__item  kt-header--fixed " data-ktheader-minimize="on">
     <div class="kt-header__top">
@@ -47,7 +58,8 @@
                                         <ul class="kt-menu__content">
                                             <li class="kt-menu__item ">
                                                 <ul class="kt-menu__inner">
-                                                    <li class="kt-menu__item pt-3" aria-haspopup="true"><a href="{{route('branch.index')}}" class="kt-menu__link "><span class="kt-menu__link-icon"><i class="flaticon2-architecture-and-city"></i></span><span class="kt-menu__link-text">Company</span></a></li>
+                                                    <li class="kt-menu__item pt-3" aria-haspopup="true"><a href="{{route('approval')}}" class="kt-menu__link "><span class="kt-menu__link-icon"><i class="flaticon2-calendar-5"></i></span><span class="kt-menu__link-text">Approval</span></a></li>
+                                                    <li class="kt-menu__item" aria-haspopup="true"><a href="{{route('branch.index')}}" class="kt-menu__link "><span class="kt-menu__link-icon"><i class="flaticon2-architecture-and-city"></i></span><span class="kt-menu__link-text">Company</span></a></li>
                                                     <li class="kt-menu__item" aria-haspopup="true"><a href="{{route('department.index')}}" class="kt-menu__link "><span class="kt-menu__link-icon"><i class="flaticon-map"></i></span><span class="kt-menu__link-text">Department</span></a></li>
                                                     <li class="kt-menu__item" aria-haspopup="true"><a href="{{route('designation.index')}}" class="kt-menu__link "><span class="kt-menu__link-icon"><i class="flaticon-share"></i></span><span class="kt-menu__link-text">Position</span></a></li>
                                                     <li class="kt-menu__item" aria-haspopup="true"><a href="{{route('pengguna')}}" class="kt-menu__link "><span class="kt-menu__link-icon"><i class="flaticon-users-1"></i></span><span class="kt-menu__link-text">Users</span></a></li>
@@ -67,33 +79,48 @@
             <!-- end:: Brand -->
             <!-- begin:: Header Topbar -->
             <div class="kt-header__topbar kt-grid__item kt-grid__item--fluid">
-                <!--begin: Search -->
-                <div class="kt-header__topbar-item kt-header__topbar-item--search dropdown" id="kt_quick_search_toggle">
-                    <div class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="10px,0px">
-                        <span class="kt-header__topbar-icon kt-header__topbar-icon--brand"><i class="flaticon2-search-1"></i></span>
-                    </div>
-                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-lg">
-                        <div class="kt-quick-search kt-quick-search--dropdown kt-quick-search--result-compact" id="kt_quick_search_dropdown">
-                            <form method="get" class="kt-quick-search__form">
-                                <div class="input-group">
-                                    <div class="input-group-prepend"><span class="input-group-text"><i class="flaticon2-search-1"></i></span></div>
-                                    <input type="text" class="form-control kt-quick-search__input" placeholder="Search...">
-                                    <div class="input-group-append"><span class="input-group-text"><i class="la la-close kt-quick-search__close"></i></span></div>
-                                </div>
-                            </form>
-                            <div class="kt-quick-search__wrapper kt-scroll" data-scroll="true" data-height="325" data-mobile-height="200">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--end: Search -->
-
                 <!--begin: Notifications -->
                 <div class="kt-header__topbar-item dropdown">
                     <div class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="10px,0px">
-                        <span class="kt-header__topbar-icon kt-header__topbar-icon--success"><i class="flaticon2-new-email"></i></span>
+                        <span class="position-relative kt-header__topbar-icon kt-header__topbar-icon--success">
+                            <i class="flaticon2-new-email"></i>
+                            {{-- Badge Notif --}}
+                            @if ($totalInboxByEmployee > 0)
+                            <div class="position-absolute bg-danger rounded-circle text-center m-auto" style="width:20px;height:20px; top:-10%; left:-34%; font-size:12px;line-height:20px">
+                                <small class="text-white kt-font-bold">{{$totalInboxByEmployee}}</small>
+                            </div>
+                            @endif
+                            {{-- End Badge Notif --}}
+                        </span>
                         <span class="kt-hidden kt-badge kt-badge--danger"></span>
+                    </div>
+                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-xl">
+                        <form>
+                            <div class="tab-content">
+                                <div class="tab-pane active show" id="topbar_notifications_notifications" role="tabpanel">
+                                    <div class="kt-notification kt-margin-t-10 kt-margin-b-10 kt-scroll" data-scroll="true" data-height="300" data-mobile-height="200">
+                                        @foreach($inbox as $listInbox)
+                                        <a href="{{route('inbox')}}" class="kt-notification__item @if($listInbox->status_read==1) kt-notification__item--read @endif">
+                                            <div class="kt-notification__item-details">
+                                                <div class="kt-notification__item-title">
+                                                    {{$listInbox->employeeSender->full_name}} @if($listInbox->status_read==0) <span class="btn btn-label-danger btn-sm btn-bold btn-font-sm px-2 py-1 ml-3">new</span> @endif
+                                                </div>
+                                                <div class="kt-notification__item-time">
+                                                    <small>
+                                                        @if($listInbox->type!=="employee_message")
+                                                            {{$listInbox->title}} | Need Approval {{ucfirst($listInbox->type)}}
+                                                        @else
+                                                            {{$listInbox->title}} 
+                                                        @endif
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <!--end: Notifications -->
@@ -118,16 +145,30 @@
                             <div class="kt-user-card__name">
                                 {{Auth::user()->name}}
                             </div>
-                            <div class="kt-user-card__badge">
-                                <span class="btn btn-label-primary btn-sm btn-bold btn-font-md">23 messages</span>
-                            </div>
                         </div>
 
                         <!--end: Head -->
 
                         <!--begin: Navigation -->
-                        <div class="kt-notification">
-                            <a href="custom/apps/user/profile-1/personal-information.html" class="kt-notification__item">
+                        <div class="kt-notification" style="z-index: 2 !important;">
+                            <a href="{{route('signature.index')}}" class="kt-notification__item ">
+                                <div class="kt-notification__item-icon">
+                                    <i class="flaticon2-pen"></i>
+                                </div>
+                                <div class="kt-notification__item-details">
+                                    <div class="kt-notification__item-title kt-font-bold">
+                                        Sign Contract
+                                    </div>
+                                    <div class="kt-notification__item-time">
+                                        Employee Signature
+                                    </div>
+                                </div>
+                            </a>
+                            @if(isset($employee['id']))
+                            <a href="{{route('employee.account', $employee['id'])}}" class="kt-notification__item">
+                            @else
+                            <a href="#" class="kt-notification__item">
+                            @endif
                                 <div class="kt-notification__item-icon">
                                     <i class="flaticon2-calendar-3 kt-font-success"></i>
                                 </div>
@@ -140,7 +181,7 @@
                                     </div>
                                 </div>
                             </a>
-                            <a href="custom/apps/user/profile-3.html" class="kt-notification__item">
+                            <a href="{{route('inbox')}}" class="kt-notification__item">
                                 <div class="kt-notification__item-icon">
                                     <i class="flaticon2-mail kt-font-warning"></i>
                                 </div>
@@ -153,7 +194,7 @@
                                     </div>
                                 </div>
                             </a>
-                            <a href="custom/apps/user/profile-2.html" class="kt-notification__item">
+                            <!-- <a href="custom/apps/user/profile-2.html" class="kt-notification__item">
                                 <div class="kt-notification__item-icon">
                                     <i class="flaticon2-rocket-1 kt-font-danger"></i>
                                 </div>
@@ -191,7 +232,7 @@
                                         billing & statements <span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill kt-badge--rounded">2 pending</span>
                                     </div>
                                 </div>
-                            </a>
+                            </a> -->
                             <div class="kt-notification__custom kt-space-between">
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf

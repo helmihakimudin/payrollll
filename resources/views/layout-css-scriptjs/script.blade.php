@@ -34,6 +34,8 @@
     $('.datepicker').datepicker({
         todayHighlight: true,
         orientation: "bottom left",
+        format: "dd/mm/yyyy",
+        autoclose: true,
     });
     $('.select2').select2({
         placeholder: "Select a choose"
@@ -50,6 +52,7 @@
         type: 'success',
         title:success,
         showConfirmButton: false,
+        timer: 2000,
     });
   </script>
 @endif
@@ -64,6 +67,7 @@
         type: 'warning',
         title:warning,
         showConfirmButton: false,
+        timer: 2000,
     });
 </script>
 @endif
@@ -78,6 +82,7 @@
         type: 'error',
         title:danger,
         showConfirmButton: false,
+        timer: 2000,
     });
 </script>
 @endif

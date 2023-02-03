@@ -2,6 +2,18 @@
 	'pages'=>'dashboard',
 	'subpages'=>''
 ])
+
+@push('css')
+	<style>
+		.kt-widget31 .kt-widget31__item .kt-widget31__content {
+			width: 100%;
+		}
+
+		.kt-widget31 .kt-widget31__item .kt-widget31__content:last-child {
+			width: auto !important;
+		}
+	</style>
+@endpush
 @section('content')
 @include('admin.include.banner')
 @include('admin.include.cart')
@@ -31,21 +43,21 @@
 			{
 				
 				label: 'Probation',
-				backgroundColor: '#B8860B',
+				backgroundColor: '#5d78ff',
 				data: [12,0,0],
 				
 			},
 			{
 				
 				label: 'Contract',
-				backgroundColor: '#7FFF00',
+				backgroundColor: '#34bfa3',
 				data: [0,10,0],
 				
 			},
 			{
 				
 				label: 'Permanent',
-				backgroundColor: '#0000FF',
+				backgroundColor: '#ffb822',
 				data: [0,0,90],
 				
 			},
@@ -75,28 +87,28 @@
 			{
 				
 				label: '< 1 Years',
-				backgroundColor: '#B8860B',
+				backgroundColor: '#fd3995',
 				data: [300,0,0,0],
 				
 			},
 			{
 				
 				label: '1 - 3 Years',
-				backgroundColor: '#7FFF00',
+				backgroundColor: '#ffb822',
 				data: [0,250,0,0],
 				
 			},
 			{
 				
 				label: '3 - 5 Years',
-				backgroundColor: '#0000FF',
+				backgroundColor: '#5d78ff',
 				data: [0,0,100,0],
 				
 			},
 			{
 				
 				label: '5 - 10 Years',
-				backgroundColor: '#8B0000',
+				backgroundColor: '#34bfa3',
 				data: [0,0,0,90],
 				
 			},
@@ -129,35 +141,35 @@
 			{
 				
 				label: 'Staff Junior',
-				backgroundColor: '#B8860B',
+				backgroundColor: '#6e4ff5',
 				data: [300,0,0,0,0],
 				
 			},
 			{
 				
 				label: 'Staff Senior',
-				backgroundColor: '#7FFF00',
+				backgroundColor: '#fd3995',
 				data: [0,250,0,0,0],
 				
 			},
 			{
 				
 				label: 'Head',
-				backgroundColor: '#0000FF',
+				backgroundColor: '#ffb822',
 				data: [0,0,100,0,0],
 				
 			},
 			{
 				
 				label: 'Managing Director',
-				backgroundColor: '#8B0000',
+				backgroundColor: '#5d78ff',
 				data: [0,0,0,90,0],
 				
 			},
 			{
 				
 				label: 'Director',
-				backgroundColor: '#2F4F4F',
+				backgroundColor: '#34bfa3',
 				data: [0,0,0,0,10],
 				
 			},
@@ -186,7 +198,7 @@
 			{
 				
 				label: ['Pria','Wanita'],
-				backgroundColor: ['#B8860B','#7FFF00'],
+				backgroundColor: ['#5d78ff','#fd3995'],
 				data: [300,100],
 				
 			},

@@ -104,7 +104,7 @@ class PenggunaController extends Controller
 
     public function store(request $request){
         $validator = Validator::make($request->all(),[
-            'name'=>'required',
+            'employee_id'=>'required',
             'branch_id'=>'required',
             'no_telp'=>'required',
             'password'=>'required',
@@ -112,10 +112,10 @@ class PenggunaController extends Controller
 
         ]);
         if($validator->fails()){
-            return redirect()->back()->with(['error'=>'Required Field!']);
+            $errors = $validator->errors();
+            return redirect()->back()->withInput()->withErrors($errors);
         }else{
             $employee = Employee::where('id',$request->employee_id)->first();
-
             if($request->avatar != null){
                 $avatar  = $request->avatar;
             }else{
@@ -127,23 +127,27 @@ class PenggunaController extends Controller
                 $signature  = null;
             }
 
-            $user = new User;
-            $user->name = $employee->full_name;
-            $user->email = $request->email;
-            $user->branch_id = $request->branch_id;
-            $user->no_telp = $request->no_telp;
-            $user->role_id = $request->type;
-            $user->password = Hash::make($request->password);
-            $user->lang= "id";
-            $user->is_active = 0;
-            $role = Role::find($request->type);
-            dd($role);
-            $user->role_id = $role->id;
-            $user->assignRole($role->name);
-            $user->avatar = $avatar;
-            $user->signature = $signature;
-            $user->created_by = Auth::user()->id;
-            $user->save();
+            if(empty($employee->user_id)){
+                $user = new User;
+                $user->name = $employee->full_name;
+                $user->email = $request->email;
+                $user->branch_id = $request->branch_id;
+                $user->no_telp = $request->no_telp;
+                $user->role_id = $request->type;
+                $user->password = $request->password;
+                $user->lang= "id";
+                $user->is_active = 0;
+                $role = Role::find($request->type);
+                $user->role_id = $role->id;
+                $user->assignRole($role->name);
+                $user->avatar = $avatar;
+                $user->signature = $signature;
+                $user->created_by = Auth::user()->id;
+                $user->save();    
+            }else{
+                return redirect()->route('pengguna')->with(['success'=>'User already exist !']);
+            }
+            
 
             //update employee by employee id
             Employee::where('id', $request->employee_id)->update(['user_id' => $user->id]);
@@ -179,6 +183,9 @@ class PenggunaController extends Controller
             $user->signature = $signature;
             $user->created_by = Auth::user()->id;
             $user->save();
+
+            // update into user id in employee
+            Employee::where('id', $request->employee_id)->update(['user_id' => $id]);
         }else{
             $user = User::find($id);
             $role = Role::where('id',$request->type)->first();
@@ -189,6 +196,9 @@ class PenggunaController extends Controller
             $user->signature = $signature;
             $user->created_by = Auth::user()->id;
             $user->save();
+
+            // update into user id in employee
+            Employee::where('id', $request->employee_id)->update(['user_id' => $id]);
         }
         return redirect()->route('pengguna')->with(['success'=>'User Successfull updated!']);
 
@@ -209,7 +219,7 @@ class PenggunaController extends Controller
     }
 
     public function autogenerate($id){
-        $employee = Employee::where('id', $id)->get(['mobile_phone','branch_id','email'])->first()->toJson();
+        $employee = Employee::where('id', $id)->get(['mobile_phone','branch_id','email','password'])->first()->toJson();
         return $employee;
     }
 

@@ -26,6 +26,7 @@ use App\ImportPayroll;
 use App\Component;
 use App\PayrollComponent;
 use App\PayrollEmployeeComponent;
+use Carbon\Carbon;
 
 class GajiController extends Controller
 {
@@ -368,59 +369,59 @@ class GajiController extends Controller
         }
     }
 
-    public function updatepengurangan(request $request){
-        $validator = Validator::make($request->all(),[
-            'amount'=>'required',
-        ]);
+    // public function updatepengurangan(request $request){
+    //     $validator = Validator::make($request->all(),[
+    //         'amount'=>'required',
+    //     ]);
 
 
-        if($validator->fails()){
-            return redirect()->back()->with(['error'=>'Required Field!']);
-        }else{
-            if($request->name =='Kasbon'){
+        // if($validator->fails()){
+        //     return redirect()->back()->with(['error'=>'Required Field!']);
+        // }else{
+        //     if($request->name =='Kasbon'){
 
-                $karyawanamount = $request->total;
-                $amount = $request->amountold;
-                $total = $karyawanamount + $amount;
-                $kasbonreduce = $total - $request->amount;
-                Employee::where('id',$request->employee_id)->update([
-                    'amount_of_leave'=>$kasbonreduce
-                ]);
-                $id = $request->id;
-                $deduction = SaturationDeduction::find($id);
-                $deduction->amount              = $request->amount;
-                $deduction->month               = date('Y-m');
-                $deduction->created_by          = Auth::user()->id;
-                $deduction->save();
-                $cek =  DB::table('pay_slips')->where('employee_id',$deduction->employee_id)->where('salary_month',$deduction->month)->cek();
-                if($cek){
-                    $payslips =  DB::table('pay_slips')->where('employee_id',$deduction->employee_id)->where('salary_month',$deduction->month)->update([
-                        'net_payble' => Employee::updategajibersih($deduction->month, $deduction->employee_id),
-                        'saturation_deduction' => Employee::updatetunjangan($deduction->month, $deduction->employee_id),
-                        'slipbyemail'=>0
-                    ]);
-                }
+        //         $karyawanamount = $request->total;
+        //         $amount = $request->amountold;
+        //         $total = $karyawanamount + $amount;
+        //         $kasbonreduce = $total - $request->amount;
+        //         Employee::where('id',$request->employee_id)->update([
+        //             'amount_of_leave'=>$kasbonreduce
+        //         ]);
+        //         $id = $request->id;
+        //         $deduction = SaturationDeduction::find($id);
+        //         $deduction->amount              = $request->amount;
+        //         $deduction->month               = date('Y-m');
+        //         $deduction->created_by          = Auth::user()->id;
+        //         $deduction->save();
+        //         $cek =  DB::table('pay_slips')->where('employee_id',$deduction->employee_id)->where('salary_month',$deduction->month)->cek();
+        //         if($cek){`
+        //             $payslips =  DB::table('pay_slips')->where('employee_id',$deduction->employee_id)->where('salary_month',$deduction->month)->update([
+        //                 'net_payble' => Employee::updategajibersih($deduction->month, $deduction->employee_id),
+        //                 'saturation_deduction' => Employee::updatetunjangan($deduction->month, $deduction->employee_id),
+        //                 'slipbyemail'=>0
+        //             ]);
+        //         }
 
-            }else{
-                $id = $request->id;
-                $deduction = SaturationDeduction::find($id);
-                $deduction->amount              = $request->amount;
-                $deduction->month               = date('Y-m');
-                $deduction->created_by          = Auth::user()->id;
-                $deduction->save();
-                $cek =  DB::table('pay_slips')->where('employee_id',$deduction->employee_id)->where('salary_month',$deduction->month)->cek();
-                if($cek){
-                    $payslips =  DB::table('pay_slips')->where('employee_id',$deduction->employee_id)->where('salary_month',$deduction->month)->update([
-                        'net_payble' => Employee::updategajibersih($deduction->month, $deduction->employee_id),
-                        'saturation_deduction' => Employee::updatetunjangan($deduction->month, $deduction->employee_id),
-                        'slipbyemail'=>0
-                    ]);
-                }
-            }
+        //     }else{
+        //         $id = $request->id;
+        //         $deduction = SaturationDeduction::find($id);
+        //         $deduction->amount              = $request->amount;
+        //         $deduction->month               = date('Y-m');
+        //         $deduction->created_by          = Auth::user()->id;
+        //         $deduction->save();
+        //         $cek =  DB::table('pay_slips')->where('employee_id',$deduction->employee_id)->where('salary_month',$deduction->month)->cek();
+        //         if($cek){
+        //             $payslips =  DB::table('pay_slips')->where('employee_id',$deduction->employee_id)->where('salary_month',$deduction->month)->update([
+        //                 'net_payble' => Employee::updategajibersih($deduction->month, $deduction->employee_id),
+        //                 'saturation_deduction' => Employee::updatetunjangan($deduction->month, $deduction->employee_id),
+        //                 'slipbyemail'=>0
+        //             ]);
+        //         }
+        //     }
 
-            return redirect()->back()->with(['success'=>'Tunjangan berhasil dibuat!']);
-        }
-    }
+        //     return redirect()->back()->with(['success'=>'Tunjangan berhasil dibuat!']);
+        // }
+    // }
 
     public function edit($id){
         $karyawan = Employee::find($id);
@@ -605,15 +606,8 @@ class GajiController extends Controller
             collect(head($data))->each(function ($row, $key) {
                 $employee = Employee::where('salary_type','=','Monthly')->orWhere('salary_type','=','Daily')->first();
 
-                //get id of effective date by current month
-                $year   = date("Y");
-                $month  = date("m");
-
-                $payrollComponent = PayrollComponent::whereYear('effective_date', '=', $year)->whereMonth('effective_date', '=', $month)->get('id')->first();
-
                 if(!empty($employee->salary_type)){
-                    $checkImport = ImportPayroll::where(['employee_id'=>$row[1],'payroll_component_id'=> $payrollComponent['id']]);
-                    if($checkImport->count()==0){
+
                         $typeComponents = Component::all();
                         foreach($typeComponents as $component){
                             $amount = $this->amountByKey($row, $component['id']);
@@ -624,21 +618,29 @@ class GajiController extends Controller
                         // get id employee
                         $id  = Employee::where('employee_id', $row[1])->pluck('id')->first();
 
-                        //insert into import payroll table
-                        $importPayroll = new ImportPayroll();
-                        $importPayroll->employee_id = $id;
-                        $importPayroll->payroll_component_id = $payrollComponent['id'];
-                        $importPayroll->total_attendance = $row[8];
-                        $importPayroll->total_working_permonth = $row[9];
-                        $importPayroll->save();
+                        $currentDate = date('Y-m-d');
+                        $payrollComponentID = PayrollComponent::where('type_adjustment','Adjustment')->whereYear('effective_date', '=', $currentDate)->whereMonth('effective_date', '=', $currentDate)->orWhereYear('end_date','=', $currentDate)->orWhereMonth('end_date','=', $currentDate)->orderByDesc('created_at')->pluck('id')->first();
 
-                        //insert into payroll employee component
-                        $componentEmp = new PayrollEmployeeComponent();
-                        $componentEmp->is_created = $payrollComponent['id'];
-                        $componentEmp->employee_id = $id;
-                        $componentEmp->component = json_encode($arrToJson);
-                        $componentEmp->save();
-                    }
+                        //insert or update into import payroll table
+                        ImportPayroll::updateOrCreate([
+                            'employee_id' => $id
+                        ],
+                        [
+                            'payroll_component_id' => $payrollComponentID,
+                            'total_attendance' => $row[8],
+                            'total_working_permonth' => $row[9]
+                        ]);
+
+                        //insert or update into payroll employee component
+                        PayrollEmployeeComponent::updateOrCreate([
+                            'employee_id' => $id,
+                        ],
+                        [
+                            'is_created' => $payrollComponentID,
+                            'is_run' => 0,
+                            'component' => json_encode($arrToJson),
+                        ]);
+
                 }
             });
         }

@@ -21,9 +21,9 @@
                         <div class="kt-widget__content">
                             <div class="kt-widget__head">
                                 <div class="kt-widget__user">
-                                    <a href="#" class="kt-widget__username">
+                                    <div class="kt-widget__username">
                                         {{Auth::user()->name}}
-                                    </a>
+                                    </div>
                                     <span class="kt-badge kt-badge--bolder kt-badge kt-badge--inline kt-badge--unified-success">{{"Head HR"}}</span>
 
                                 </div>	
@@ -72,10 +72,10 @@
                             </div>
                             <div class="kt-widget__content" id="content-post{{$p->id}}">
                                 <div class="kt-widget__head">
-                                    <a href="#" class="kt-widget__username">
+                                    <div class="kt-widget__username">
                                         {{Auth::user()->name}}
                                         <i class="flaticon2-correct kt-font-success"></i>
-                                    </a>
+                                    </div>
                                     <div class="kt-widget__action">
                                         <button type="button" data-attr="{{route('admin.pengumuman.edit',$p->id)}}" data-id="{{$p->id}}" class="btn btn-label-warning btn-icon btn-edit" title="Edit" ><i class="flaticon-edit "></i></button>
                                          &nbsp;
@@ -83,7 +83,7 @@
                                     </div>
                                 </div>
                                 <div class="kt-widget__subhead">
-                                    <a href="#"><i class="flaticon-calendar-3"></i>{{date('d M Y h:i:s',strtotime($p->created_at))}} wib</a>
+                                    <a><i class="flaticon-calendar-3"></i>{{date('d M Y h:i:s',strtotime($p->created_at))}} wib</a>
                                 </div>
                                 <div class="kt-widget__subhead">
                                    <h5>{!! $p->announcement_title !!}</h5>

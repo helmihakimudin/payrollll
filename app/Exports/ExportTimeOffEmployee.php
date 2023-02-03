@@ -3,15 +3,25 @@
 namespace App\Exports;
 
 use App\TimeOffEmployee;
+use Maatwebsite\Excel\Events\AfterSheet;
+use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class ExportTimeOffEmployee implements FromCollection
+class ExportTimeOffEmployee implements FromView, WithTitle
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
+    public function title(): string
+     {
+          return 'Time Off Employee';
+     }
+
+    public function view(): View
     {
-        return TimeOffEmployee::all();
+        $timeoffemployee = TimeOffEmployee::all();
+
+        return view('admin.timeoff.export-timeoffemployee',compact('timeoffemployee'));
     }
 }
+
+

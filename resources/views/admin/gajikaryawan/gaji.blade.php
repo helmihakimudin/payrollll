@@ -78,7 +78,7 @@
 </div>
 @endsection
 @push('script')
-<script>
+{{-- <script>
 $('#calculate_work').keyup(function(){
 	var calculate = $(this).val();
     var result = calculate / $('#amount_work').val() * $('#salary').val();
@@ -90,6 +90,6 @@ $('#amount_work').keyup(function(){
 	var result = $("#amount_work").val() / amount * $('#salary').val();
 	$('#net_salary').val(Math.ceil(result));
 });
-</script>
+</script> --}}
 @endpush
 

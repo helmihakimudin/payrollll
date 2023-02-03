@@ -10,6 +10,9 @@
                 Employment
             </h3>
         </div>
+        <div class="kt-portlet__head-toolbar">
+             <button type="button" class="btn px-4 btn-sm btn-outline-dark rounded" data-toggle="modal" data-target="#kt_modal_1"><i class="la la-edit"></i>Edit</button>
+        </div>
     </div>
     <div class="kt-portlet__body">
         <div class="row">
@@ -17,14 +20,14 @@
                 <span class="font-weight-bold"> Employment data </span><br>
                 <span style="font-size:11px;">Your data information related to company..</span>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-8">
                 <ul class="list-unstyled mb-0">
                     <li>
                         <div class="row py-2">
                                 <div class="col-sm-4 d-flex align-items-center">
-                                    <span class="font-weight-bold"> Company ID </span>
+                                    <span class="font-weight-bold"> Employee ID </span>
                                 </div>
-                            <div class="col-sm-8"><p>{{$karyawan->employee_id}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{$karyawan->employee_id}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -32,7 +35,7 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold"> Barcode</span>
                                 </div>
-                                <div class="col-sm-8"><p>{{$karyawan->barcode}}</p></div>
+                                <div class="col-sm-8"><p class="m-0">{{$karyawan->barcode}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -40,7 +43,24 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold"> Job position </span>
                                 </div>
-                            <div class="col-sm-8"><p>{{$karyawan->jobposition}}</p></div>
+                                
+                            <div class="col-sm-8">
+                                <p class="m-0">
+                                    @if(isset($karyawan->jobPosition->name))
+                                        {{$karyawan->jobPosition->name}}
+                                    @else
+                                        -
+                                    @endif
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="row py-2">
+                                <div class="col-sm-4 d-flex align-items-center">
+                                    <span class="font-weight-bold"> Organization </span>
+                                </div>
+                            <div class="col-sm-8"><p class="m-0">{{$karyawan->organization->name}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -48,7 +68,7 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold"> Job level </span>
                                 </div>
-                            <div class="col-sm-8"><p>{{$karyawan->job_level}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{$karyawan->jobLevel->name}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -56,7 +76,7 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold">Employeement Status</span>
                                 </div>
-                            <div class="col-sm-8"><p>{{$karyawan->employeement_status}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{$karyawan->employeement_status}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -64,7 +84,7 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold">Branch Location</span>
                                 </div>
-                            <div class="col-sm-8"><p>{{$karyawan->branch}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{$karyawan->branch->name}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -72,7 +92,15 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold">Department</span>
                                 </div>
-                            <div class="col-sm-8"><p>{{$karyawan->department}}</p></div>
+                            <div class="col-sm-8">
+                                <p class="m-0">
+                                    @if(isset($karyawan->department->name))
+                                        {{$karyawan->department->name}}
+                                    @else
+                                        -
+                                    @endif
+                                </p>
+                            </div>
                         </div>
                     </li>
                     <li>
@@ -80,31 +108,15 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold"> Join Date</span>
                                 </div>
-                            <div class="col-sm-8"><p>{{date('d M Y',strtotime($karyawan->company_doj))}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{date('d M Y',strtotime($karyawan->join_date))}}</p></div>
                         </div>
                     </li>
                     <li>
                         <div class="row py-2">
                                 <div class="col-sm-4 d-flex align-items-center">
-                                    <span class="font-weight-bold"> End employment status date</span>
+                                    <span class="font-weight-bold"> End date</span>
                                 </div>
-                            <div class="col-sm-8"><p>{{date("d F Y",strtotime($karyawan->end_date))}}</p></div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="row py-2">
-                                <div class="col-sm-4 d-flex align-items-center">
-                                    <span class="font-weight-bold">Grade</span>
-                                </div>
-                            <div class="col-sm-8"><p>{{"-"}}</p></div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="row py-2">
-                                <div class="col-sm-4 d-flex align-items-center">
-                                    <span class="font-weight-bold">Class</span>
-                                </div>
-                            <div class="col-sm-8"><p>{{"-"}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{date("d F Y",strtotime($karyawan->end_date))}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -112,7 +124,7 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold">Approval line</span>
                                 </div>
-                            <div class="col-sm-8"><p>{{"BOD009 - Akbar Syaputra"}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{@$karyawan->employeeApprovalLine->employee_id}} - {{@$karyawan->employeeApprovalLine->full_name}}</p></div>
                         </div>
                     </li>
                 </ul>
@@ -120,10 +132,6 @@
         </div>
         <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
         <div class="row">
-            <div class="col-lg-4">   
-                <span class="font-weight-bold">  Direct reports</span><br>
-                <span style="font-size:11px;">Employees who need your approval</span>
-            </div>
             <div class="col-lg-6 pt-3">
                 <div class="kt-widget4">
                     @foreach($relatebranch as $row)
@@ -186,5 +194,147 @@
         </div>
     </div>
     <!--end::Form-->
+</div>
+
+<!-- Modal Edit -->
+<div class="modal fade" id="kt_modal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Employment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <form class="kt-form" action="{{route('employee.account.employeement-data.update', $karyawan->id)}}" method="post">
+                @csrf
+              <div class="modal-body">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-6 col-xl-6">
+                            <label><span style="color:red">*</span>Employee ID</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text"><i class="flaticon2-user"></i></span></div>
+                                <input class="form-control" type="text" name="employee_id"  placeholder="Employee ID" value="{{$karyawan->employee_id}}" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xl-6">
+                            <label><span style="color:red">*</span>Barcode</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-barcode"></i></span></div>
+                                <input class="form-control" type="text" name="barcode"  placeholder="Barcode" value="{{$karyawan->barcode}}" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-6 col-xl-6">
+                            <label><span style="color:red">*</span>Employement Status</label>
+                            <select name="employeement_status" id="employee_status" class="form-control select2_add_employee" required>
+                                <option value="">Select</option>
+                                <option value="Contract" @if($karyawan->employeement_status == "Contract") selected @endif>Contract</option>
+                                <option value="Permanent" @if($karyawan->employeement_status == "Permanent") selected @endif>Permanent</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-6 col-xl-6">
+                            <label><span style="color:red">*</span>Organization</label>
+                            <select name="organization_id" id="organization_id" class="form-control select2_add_employee" required>
+                                <option value="" selected>Select</option>
+                                @foreach(DB::table('organization')->get() as $row)
+                                <option value="{{$row->id}}" @if($row->id==$karyawan->organization_id) selected @endif>{{$row->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row select">
+                        <div class="col-lg-6 col-xl-6">
+                            <label><span style="color:red">*</span>Branch</label>
+                            <select name="branch_id" id="branch_id" class="form-control select2_add_employee" required style="width:100%">
+                                <option value="test" selected>Select</option>
+                                @foreach(DB::table('branches')->get() as $row)
+                                <option value="{{$row->id}}" @if($row->id==$karyawan->branch_id) selected @endif>{{$row->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-6 col-xl-6">
+                            <label><span style="color:red">*</span>Department</label>
+                            <select name="department_id" id="department_id" class="form-control select2_add_employee" required style="width:100%">
+                                <option value="" selected>Select</option>
+                                @foreach(DB::table('departments')->get() as $row)
+                                <option value="{{$row->id}}" class="{{$row->branch_id}}" @if($row->id==$karyawan->department_id) selected @endif>{{$row->name}}</option>
+                                @endforeach
+                            </select>
+                            <div id="department-options" class="hidden">
+                                @foreach(DB::table('departments')->get() as $row)
+                                <option value="{{$row->id}}" class="{{$row->branch_id}}">{{$row->name}}</option>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-6 col-xl-6">
+                            <label><span style="color:red">*</span>Join Date </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text"><i class="flaticon2-calendar-9"></i></span></div>
+                                <input class="form-control datepicker" type="text" name="join_date"  placeholder="Join Date" value="{{\Carbon\Carbon::parse($karyawan->join_date)->format('d/m/Y')}}" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xl-6">
+                            <label><span style="color:red">*</span>End Date </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text"><i class="flaticon2-calendar-9"></i></span></div>
+                                <input class="form-control datepicker" type="text" name="end_date"  placeholder="End Date" value="{{\Carbon\Carbon::parse($karyawan->end_date)->format('d/m/Y')}}" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-6 col-xl-6">
+                            <label><span style="color:red">*</span>Job Position</label>
+                            <select name="job_position_id" id="job_position_id" class="form-control select2_add_employee" required>
+                                <option value="" selected>Select</option>
+                                @foreach(DB::table('job_position')->get() as $row)
+                                <option value="{{$row->id}}" name="{{$row->name}}" @if($row->id==$karyawan->job_position_id) selected @endif>{{$row->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-6 col-xl-6">
+                            <label><span style="color:red">*</span>Job Level</label>
+                            <select name="job_level_id" id="job_level_id" class="form-control select2_add_employee" required>
+                                <option value="" selected>Select</option>
+                                @foreach(DB::table('job_level')->get() as $row)
+                                <option value="{{$row->id}}" name="{{$row->name}}" @if($row->id==$karyawan->job_level_id) selected @endif>{{$row->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-6 col-xl-6">
+                            <label><span style="color:red">*</span>Approval Line</label>
+                            <br/>
+                            <select name="approval_line_id" id="approval_line_id" class="form-control select2_add_employee" required>
+                                <option value="" selected>Select</option>
+                                @foreach(DB::table('employees')->get() as $row)
+                                <option value="{{$row->id}}" name="{{$row->full_name}}" @if($row->id==$karyawan->approval_line_id) selected @endif>{{$row->full_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+        </div>
+    </div>
 </div>
 @endsection

@@ -34,7 +34,7 @@
                     </div>
                     <div class="form-group">
                         <label >Pilih Akses :</label>
-                        <select class="form-control select-custom"  style="width:100%;" id="permission_id" name="permission_id[]" multiple="multiple" required>
+                        <select class="form-control select-custom"  style="width:100%;" id="permission_id" name="permission_id[]" multiple="multiple">
                             <option value="">Select Akses</option>
                             @php 
                                 $select = implode(",",$arraypermission);

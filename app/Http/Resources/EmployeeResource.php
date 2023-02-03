@@ -3,6 +3,8 @@
 namespace App\Http\Resources;
 
 use App\Calendar;
+use App\Branch;
+use App\JobPosition;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 use function PHPSTORM_META\map;
@@ -17,11 +19,16 @@ class EmployeeResource extends JsonResource
      */
     public function toArray($request)
     {
+        // dd($this);
         $data = parent::toArray($request);
         // foreach ($data as $key => $value) {
         //     $data[$key]['shift_id'] = new CalendarResource($this->calendars);
         // }
         // dd($data);
+
+        $branch = Branch::where('id', $this->branch_id)->first();
+        $job_position = JobPosition::where('id', $this->job_position_id)->first();
+
         return [
             'success' => true,
             'message' => 'get data user',
@@ -49,6 +56,8 @@ class EmployeeResource extends JsonResource
                 'contract_status' => $this->contract_status,
                 'employee_id' => $this->employee_id,
                 'branch_id' => $this->branch_id,
+                'branch_name' => $branch->name ?? '',
+                'job_position_name' => $job_position->name ?? '',
                 'department_id' => $this->department_id,
                 'designation_id' => $this->designation_id,
                 'company_id' => $this->company_id,

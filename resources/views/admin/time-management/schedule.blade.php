@@ -1092,7 +1092,7 @@
                     quietMillis: 50,
                     data: function (term) {
                         return {
-                            q: term
+                            q: term.term
                         };
                     },
                     processResults: function (data) {

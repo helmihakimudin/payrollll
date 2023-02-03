@@ -14,20 +14,21 @@ use App\Branch;
 use App\Department;
 use App\Designation;
 use App\Contract;
+
 class ExportKaryawan implements FromView,WithEvents,WithColumnFormatting
 {
     public function view(): View
     {
-  
+
         $employees =  Karyawan::all();
 
         $data = array();
 
-     
+
         foreach ($employees as $employee) {
             $arr['id'] = $employee->id;
             $arr['user_id'] = $employee->user_id;
-            $arr['name'] = $employee->name;
+            $arr['name'] = $employee->full_name;
             $arr['email'] = $employee->email;
             $arr['pob'] = $employee->pob;
             $arr['dob'] = date('n/d/Y',strtotime($employee->dob));
@@ -42,11 +43,11 @@ class ExportKaryawan implements FromView,WithEvents,WithColumnFormatting
             $arr['family_card'] = $employee->family_card;
             $arr['id_card_address'] = $employee->id_card_address;
             $arr['address'] = $employee->address;
-            $arr['password'] = $employee->password;
             $arr['employee_id'] = $employee->employee_id;
             $arr['branch_id'] = $employee->branch_id;
             $arr['department_id'] = $employee->department_id;
-            $arr['designation_id'] = $employee->designation_id;
+            $arr['job_position_id'] = $employee->job_position_id;
+            $arr['job_level_id'] = $employee->job_level_id;
             $arr['company_doj'] = date('n/d/Y',strtotime($employee->company_doj));
             $arr['end_date'] = date('n/d/Y',strtotime($employee->end_date));
             $arr['account_holder_name'] = $employee->account_holder_name;
@@ -54,8 +55,8 @@ class ExportKaryawan implements FromView,WithEvents,WithColumnFormatting
             $arr['bank_name'] = $employee->bank_name;
             $arr['tax_payer_id'] = $employee->tax_payer_id;
             $arr['salary_type'] = $employee->salary_type;
-            $arr['salary'] = $employee->salary; 
-            $arr['tax_payer_id'] = $employee->tax_payer_id; 
+            $arr['salary'] = $employee->salary;
+            $arr['tax_payer_id'] = $employee->tax_payer_id;
             array_push($data, $arr);
         }
         return view('admin.karyawan.export', [
@@ -85,7 +86,7 @@ class ExportKaryawan implements FromView,WithEvents,WithColumnFormatting
                     'alignment' => [
                         'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
                         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    ],   
+                    ],
                 ];
                 $borderArray =[
                     'borders' => [
@@ -177,7 +178,7 @@ class ExportKaryawan implements FromView,WithEvents,WithColumnFormatting
                 $n=2;
                 $count = Karyawan::count();
                 $total = $n + $count;
-        
+
                 for($n;$n<$total;$n++){
                     $branch = Branch::all();
                     $arr = array();
@@ -195,20 +196,20 @@ class ExportKaryawan implements FromView,WithEvents,WithColumnFormatting
                     foreach($Designation as $row){
                         $arr3[] = $row->name;
                     }
-                    
+
                     $Contract = Contract::all();
                     $arr4 = array();
                     foreach($Contract as $row){
                         $arr4[] = $row->contract_name;
                     }
 
-                    
+
                     $text  = implode(",",$arr);
                     $text2 = implode(",",$arr2);
                     $text3 = implode(",",$arr3);
                     $text4 = implode(",",$arr4);
 
-                    
+
                     $event->sheet->setCellValue('Q'.strval($count+2), "Pilih Perusahaan");
                     $event->sheet->setCellValue('R'.strval($count+2), "Pilih Departement");
                     $event->sheet->setCellValue('S'.strval($count+2), "Pilih Jabatan");
@@ -216,7 +217,7 @@ class ExportKaryawan implements FromView,WithEvents,WithColumnFormatting
                     $event->sheet->setCellValue('G'.strval($count+2), "Pilih Jenis Kelamin");
                     $event->sheet->setCellValue('H'.strval($count+2), "Pilih Status");
                     $event->sheet->setCellValue('I'.strval($count+2), "Pilih Status Pernikahan");
-                    
+
                     $configs  = $text;
                     $configs2 = $text2;
                     $configs3 = $text3;
@@ -231,7 +232,7 @@ class ExportKaryawan implements FromView,WithEvents,WithColumnFormatting
                     $objValidation->setShowErrorMessage(true);
                     $objValidation->setShowDropDown(true);
                     $objValidation->setFormula1('"' . $configs . '"');
-                   
+
                     $objValidation2 = $event->sheet->getCell('R'.strval($count+2))->getDataValidation();
                     $objValidation2->setType(DataValidation::TYPE_LIST);
                     $objValidation2->setShowInputMessage(true);
@@ -273,7 +274,7 @@ class ExportKaryawan implements FromView,WithEvents,WithColumnFormatting
                     $objValidation7->setShowErrorMessage(true);
                     $objValidation7->setShowDropDown(true);
                     $objValidation7->setFormula1('"' . $configs7 . '"');
-    
+
                     $event->sheet->getStyle('B'.strval($n))->getAlignment()->setHorizontal('left');
                     $event->sheet->getStyle('C'.strval($n))->getAlignment()->setHorizontal('left');
                     $event->sheet->getStyle('D'.strval($n))->getAlignment()->setHorizontal('left');
@@ -303,7 +304,7 @@ class ExportKaryawan implements FromView,WithEvents,WithColumnFormatting
                     if($n % 2 == 0){
                         $event->sheet->getStyle('A'.strval($n).':Z'.strval($n))->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFFFFF');
                     }else{
-                        $event->sheet->getStyle('A'.strval($n).':Z'.strval($n))->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('DCDCDC'); 
+                        $event->sheet->getStyle('A'.strval($n).':Z'.strval($n))->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('DCDCDC');
                     }
                     $event->sheet->getStyle('A'.strval(2).':A'.strval($count+1))->applyFromArray($borderArray);
                     $event->sheet->getStyle('B'.strval(2).':B'.strval($count+1))->applyFromArray($borderArray);

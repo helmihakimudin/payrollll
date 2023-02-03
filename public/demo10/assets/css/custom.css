@@ -1,19 +1,28 @@
-.image-trim {
+/* .image-trim {
     max-height: 750px;
     max-width: 650px;
     overflow-y: hidden;
-}
-.shortcut-header {
+} */
+/* .shortcut-header {
     height: 250px;
-}
-.img-avatar-girl {
+} */
+/* .img-avatar-girl {
     width: 60%;
     bottom: -40px;
 }
 .img-avatar-boy {
     width: 70%;
     bottom: -60px;
+} */
+
+/* .unread {
+    background-color: #eaf1ff;
 }
+
+.unread .kt-notification__item-details .kt-notification__item-title {
+    color: #5867dd !important;
+} */
+
 .user-hello {
     font-size: 30px;
     color: black;

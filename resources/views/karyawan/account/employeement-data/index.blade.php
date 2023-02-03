@@ -24,7 +24,7 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold"> Company ID </span>
                                 </div>
-                            <div class="col-sm-8"><p>{{Auth::guard('emp')->user()->employee_id}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{Auth::guard('emp')->user()->employee_id}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -32,7 +32,7 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold"> Barcode</span>
                                 </div>
-                                <div class="col-sm-8"><p>{{Auth::guard('emp')->user()->barcode}}</p></div>
+                                <div class="col-sm-8"><p class="m-0">{{Auth::guard('emp')->user()->barcode}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -40,7 +40,7 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold"> Job position </span>
                                 </div>
-                            <div class="col-sm-8"><p>{{$karyawan->jobposition}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{$karyawan->jobposition}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -48,7 +48,7 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold"> Job level </span>
                                 </div>
-                            <div class="col-sm-8"><p>{{$karyawan->job_level}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{$karyawan->job_level}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -56,7 +56,7 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold">Employeement Status</span>
                                 </div>
-                            <div class="col-sm-8"><p>{{$karyawan->employeement_status}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{$karyawan->employeement_status}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -64,7 +64,7 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold">Branch Location</span>
                                 </div>
-                            <div class="col-sm-8"><p>{{$karyawan->branch}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{$karyawan->branch}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -72,7 +72,7 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold"> Join Date</span>
                                 </div>
-                            <div class="col-sm-8"><p>{{date('d M Y',strtotime(Auth::guard("emp")->user()->company_doj))}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{date('d M Y',strtotime(Auth::guard("emp")->user()->company_doj))}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -80,7 +80,7 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold"> End employment status date</span>
                                 </div>
-                            <div class="col-sm-8"><p>{{date("d F Y",strtotime(Auth::guard("emp")->user()->end_date))}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{date("d F Y",strtotime(Auth::guard("emp")->user()->end_date))}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -88,7 +88,7 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold">Grade</span>
                                 </div>
-                            <div class="col-sm-8"><p>{{"-"}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{"-"}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -96,7 +96,7 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold">Class</span>
                                 </div>
-                            <div class="col-sm-8"><p>{{"-"}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{"-"}}</p></div>
                         </div>
                     </li>
                     <li>
@@ -104,7 +104,7 @@
                                 <div class="col-sm-4 d-flex align-items-center">
                                     <span class="font-weight-bold">Approval line</span>
                                 </div>
-                            <div class="col-sm-8"><p>{{"BOD009 - Akbar Syaputra"}}</p></div>
+                            <div class="col-sm-8"><p class="m-0">{{@$karyawan->employeeApprovalLine->employee_id}} - {{@$karyawan->employeeApprovalLine->full_name}}</p></div>
                         </div>
                     </li>
                 </ul>

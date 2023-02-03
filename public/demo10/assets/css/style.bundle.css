@@ -14634,7 +14634,8 @@ body.swal2-height-auto {
 
 .dataTables_wrapper .pagination .page-item.active > .page-link {
   background: #5d78ff;
-  color: #ffffff; }
+  color: #ffffff;
+z-index: 1; }
 
 .dataTables_wrapper .pagination .page-item:hover > .page-link {
   background: #5d78ff;

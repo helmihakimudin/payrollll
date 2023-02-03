@@ -4,7 +4,7 @@ use App\Http\Controllers\TimeManagementController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-
+use App\Http\Controllers\Admin\PayrollController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -48,7 +48,13 @@ Route::group(['middleware'=>'admin'],function(){
     Route::get('/timeoff/simulation/{id}','Admin\TimeoffController@simulation')->name('timeoff.simulation');
     // Route::get('/timeoff/simulation/calculate','Admin\TimeoffController@simulation')->name('timeoff.simulation.calculate');
     Route::get('/export/timeoffassign','Admin\TimeoffController@exportTimeoffassign')->name('exportTimeoffassign');
+    Route::post('/import/timeoffassign', 'Admin\TimeoffController@importTimeoffassign')->name('importTimeoffassign');
+    Route::post('/timeoffbalance-ajax', 'Admin\TimeoffController@timeoffbalanceajax')->name('timeoff.balance.ajax');
+    Route::post('/logbalance-ajax', 'Admin\TimeoffController@logbalanceajax')->name('log.balance.ajax');
+    Route::get('/log-modal/{timeoff_id}/{employee_id}/{type}', 'Admin\TimeoffController@logmodal')->name('logmodal');
 
+
+    // End Time off
 
 
     /*Overtime*/
@@ -60,21 +66,25 @@ Route::group(['middleware'=>'admin'],function(){
     Route::get('/location/edit','Admin\LocationController@edit')->name('location.edit');
 
     /*Attendance*/
-    Route::get('/attendance','Admin\attendanceController@index')->name('attendance');
-    Route::get('/attendance/create','Admin\attendanceController@create')->name('attendance.create');
+    Route::get('/attendance','Admin\AttendanceController@index')->name('attendance');
+    Route::get('/attendance/create','Admin\AttendanceController@create')->name('attendance.create');
 
-    Route::post('/setting/attendance/store','Admin\attendanceController@store')->name('setting.attendance.store');
-    Route::post('/setting/attendance/store-shift','Admin\attendanceController@storeShift')->name('setting.attendance.store-shift');
-    Route::post('/setting/attendance/delete-shift','Admin\attendanceController@deleteShift')->name('setting.attendance.delete-shift');
+    Route::post('/setting/attendance/store','Admin\AttendanceController@store')->name('setting.attendance.store');
+    Route::post('/setting/attendance/store-shift','Admin\AttendanceController@storeShift')->name('setting.attendance.store-shift');
+    Route::post('/setting/attendance/delete-shift','Admin\AttendanceController@deleteShift')->name('setting.attendance.delete-shift');
 
-    Route::post('/setting/attendance/getshift','Admin\attendanceController@getShifts')->name('setting.attendance.getshifts');
-    Route::post('/setting/attendance/set-show-in-request','Admin\attendanceController@setShowInRequest')->name('setting.attendance.set-show-in-request');
-    Route::post('/setting/attendance/assign-employee','Admin\attendanceController@assignEmployee')->name('setting.attendance.assign-employee');
+    Route::post('/setting/attendance/getshift','Admin\AttendanceController@getShifts')->name('setting.attendance.getshifts');
+    Route::post('/setting/attendance/set-show-in-request','Admin\AttendanceController@setShowInRequest')->name('setting.attendance.set-show-in-request');
+    Route::post('/setting/attendance/assign-employee','Admin\AttendanceController@assignEmployee')->name('setting.attendance.assign-employee');
 
 
     /*Time Management*/
     Route::get('/time-management','Admin\TimeManagementController@index')->name('time');
     Route::post('/time-management/ajax','Admin\TimeManagementController@attendAjax')->name('attend.ajax');
+    Route::post('/time-management/attendance/delete','Admin\TimeManagementController@attendanceDelete')->name('attendance-delete');
+    Route::post('/time-management/attendance/detail','Admin\TimeManagementController@attendanceDetail')->name('attendance-detail');
+    Route::post('/time-management/attendance/edit-save','Admin\TimeManagementController@attendanceEditSave')->name('attendance-edit-save');
+    Route::get('/time-management/time-off-list','Admin\TimeManagementController@getTimeOff')->name('time-off-list');
     Route::post('/time-management/daily-data','Admin\TimeManagementController@getDailyDataAttendance')->name('attend.daily_data');
     Route::get('/time-management/schedule','Admin\TimeManagementController@schedule')->name('time.schedule');
     Route::get('/time-management/filter-schedule-list','Admin\TimeManagementController@getFilterSchedule')->name('time.schedule.filter-list');
@@ -85,11 +95,6 @@ Route::group(['middleware'=>'admin'],function(){
     Route::post('/time-management/schedule/weeks','Admin\TimeManagementController@getWeeks')->name('time.schedule.weeks');
     Route::get('/time-management/schedule/employees','Admin\TimeManagementController@getEmployee')->name('time.schedule.employees');
     Route::post('/time-management/schedule/assign-bulk','Admin\TimeManagementController@assignBulk')->name('time.schedule.assign-bulk');
-
-    // Route::get('/time-management','Admin\TimeManagementController@index')->name('time');
-    // Route::post('/time-management/ajax','Admin\TimeManagementController@attendAjax')->name('attend.ajax');
-    // Route::get('/time-management/schedule','Admin\TimeManagementController@schedule')->name('time.schedule');
-    // Route::post('/time-management/schedule/ajax-employees','Admin\TimeManagementController@ajaxEmployees')->name('time.schedule.ajax.employee');
 
     /*dashboard */
     Route::get('/', 'Admin\DashboardController@index')->name('dashboard');
@@ -110,40 +115,39 @@ Route::group(['middleware'=>'admin'],function(){
     Route::get('/employee/destroy/{id}','Admin\KaryawanController@destroy')->name('employee.destroy');
     Route::post('/employee/import','Admin\KaryawanController@import')->name('employee.import');
 
-    /*Karyawan / Aktivasi*/
-    Route::get('/aktivasi','Admin\AktivasiController@index')->name('aktivasi');
-    Route::get('/aktivasi/create','Admin\AktivasiController@create')->name('aktivasi.create');
-    Route::get('/aktivasi/success','Admin\AktivasiController@success')->name('aktivasi.success');
-    Route::get('/aktivasi/invalid','Admin\AktivasiController@invalid')->name('aktivasi.invalid');
-
     /*karyawan / Account / Persoanal */
     Route::get('/employee/{id}/account','Admin\KaryawanController@account')->name('employee.account');
-    Route::get('employee/account/personal/{id}', 'admin\KaryawanController@account')->name('employee.account.personal');
+    Route::get('employee/account/personal/{id}', 'Admin\KaryawanController@account')->name('employee.account.personal');
 
     /* account / personal /edit & update */
     Route::get('employee/account/personal/request/edit/{id}', 'Admin\KaryawanController@personal_request_edit')->name('employee.account.personal.request.edit');
     Route::put('employee/account/personal/request/update/{id}', 'Admin\KaryawanController@personal_request_update')->name('employee.account.personal.request.update');
 
+    /* account / Identity /edit & update */
+    Route::get('employee/account/identity/request/edit/{id}', 'Admin\KaryawanController@identity_request_edit')->name('employee.account.identity.request.edit');
+    Route::put('employee/account/identity/request/update/{id}', 'Admin\KaryawanController@identity_request_update')->name('employee.account.identity.request.update');
+
     /*karyawan / Account / Persoanal / family */
-    Route::post('employee/account/personal/family/ajax', 'admin\KaryawanController@family_ajax')->name('employee.account.personal.family.ajax');
-    Route::get('employee/account/personal/family/create/{id}', 'admin\KaryawanController@family_create')->name('employee.account.personal.family.create');
-    Route::post('employee/account/personal/family/store/{id}', 'admin\KaryawanController@family_store')->name('employee.account.personal.family.store');
-    Route::get('employee/account/personal/family/edit/{id}', 'admin\KaryawanController@family_edit')->name('employee.account.personal.family.edit');
-    Route::PUT('employee/account/personal/family/update/{id}', 'admin\KaryawanController@family_update')->name('employee.account.personal.family.update');
-    Route::get('employee/account/personal/family/show/{id}', 'admin\KaryawanController@family_show')->name('employee.account.personal.family.show');
-    Route::get('employee/account/personal/family/delete/{id}', 'admin\KaryawanController@family_delete')->name('employee.account.personal.family.delete');
+    Route::post('employee/account/personal/family/ajax', 'Admin\KaryawanController@family_ajax')->name('employee.account.personal.family.ajax');
+    Route::get('employee/account/personal/family/create/{id}', 'Admin\KaryawanController@family_create')->name('employee.account.personal.family.create');
+    Route::post('employee/account/personal/family/store/{id}', 'Admin\KaryawanController@family_store')->name('employee.account.personal.family.store');
+    Route::get('employee/account/personal/family/edit/{id}', 'Admin\KaryawanController@family_edit')->name('employee.account.personal.family.edit');
+    Route::PUT('employee/account/personal/family/update/{id}', 'Admin\KaryawanController@family_update')->name('employee.account.personal.family.update');
+    Route::get('employee/account/personal/family/show/{id}', 'Admin\KaryawanController@family_show')->name('employee.account.personal.family.show');
+    Route::get('employee/account/personal/family/delete/{id}', 'Admin\KaryawanController@family_delete')->name('employee.account.personal.family.delete');
 
     /*karyawan / Account / Persoanal / emergency */
-    Route::post('employee/account/personal/emergency/ajax', 'admin\KaryawanController@emergency_ajax')->name('employee.account.personal.emergency.ajax');
-    Route::get('employee/account/personal/emergency/create/{id}', 'admin\KaryawanController@emergency_create')->name('employee.account.personal.emergency.create');
-    Route::post('employee/account/personal/emergency/store/{id}', 'admin\KaryawanController@emergency_store')->name('employee.account.personal.emergency.store');
-    Route::get('employee/account/personal/emergency/edit/{id}', 'admin\KaryawanController@emergency_edit')->name('employee.account.personal.emergency.edit');
-    Route::PUT('employee/account/personal/emergency/update/{id}', 'admin\KaryawanController@emergency_update')->name('employee.account.personal.emergency.update');
-    Route::get('employee/account/personal/emergency/show/{id}', 'admin\KaryawanController@emergency_show')->name('employee.account.personal.emergency.show');
-    Route::get('employee/account/personal/emergency/delete/{id}', 'admin\KaryawanController@emergency_delete')->name('employee.account.personal.emergency.delete');
+    Route::post('employee/account/personal/emergency/ajax', 'Admin\KaryawanController@emergency_ajax')->name('employee.account.personal.emergency.ajax');
+    Route::get('employee/account/personal/emergency/create/{id}', 'Admin\KaryawanController@emergency_create')->name('employee.account.personal.emergency.create');
+    Route::post('employee/account/personal/emergency/store/{id}', 'Admin\KaryawanController@emergency_store')->name('employee.account.personal.emergency.store');
+    Route::get('employee/account/personal/emergency/edit/{id}', 'Admin\KaryawanController@emergency_edit')->name('employee.account.personal.emergency.edit');
+    Route::PUT('employee/account/personal/emergency/update/{id}', 'Admin\KaryawanController@emergency_update')->name('employee.account.personal.emergency.update');
+    Route::get('employee/account/personal/emergency/show/{id}', 'Admin\KaryawanController@emergency_show')->name('employee.account.personal.emergency.show');
+    Route::get('employee/account/personal/emergency/delete/{id}', 'Admin\KaryawanController@emergency_delete')->name('employee.account.personal.emergency.delete');
 
     /*karyawan / Account / Employement data */
-    Route::get('employee/account/employeement-data/{id}', 'Admin\KaryawanController@employementdata')->name('employee.account.employeement-data');
+    Route::get('employee/account/employeement-data/{id}', 'Admin\KaryawanController@employementdata')->name('employee.account.employeement-data');  
+    Route::post('employee/account/employeement-data/update/{id}', 'Admin\KaryawanController@employementUpdate')->name('employee.account.employeement-data.update');
 
     /*karyawan / Account / education formal*/
     Route::get('employee/account/education/{id}', 'Admin\KaryawanController@education')->name('employee.account.education');
@@ -173,12 +177,44 @@ Route::group(['middleware'=>'admin'],function(){
     Route::get('employee/account/education/working/show/{id}', 'Admin\KaryawanController@show_education_working')->name('employee.account.education.working.show');
     Route::get('employee/account/education/working/delete/{id}', 'Admin\KaryawanController@delete_education_working')->name('employee.account.education.working.delete');
 
+    /*Account / Time Management / Attendance*/
+    Route::get('employee/account/attendance/{id}', 'Admin\KaryawanController@attendance')->name('employee.account.attendance');
+    /*Account / Time Management / shift*/
+    Route::get('employee/account/shift/{id}', 'Admin\KaryawanController@shift')->name('employee.account.shift');
+
+
+    /*Account / Time Management / Timeoff*/
+    Route::get('employee/account/timeoff/{id}', 'Admin\KaryawanController@timeoff')->name('employee.account.timeoff');
+    Route::post('employee/account/timeoff/delegation/{id}', 'Admin\KaryawanController@delegateStore')->name('employee.account.timeoff.delegation');
+    Route::post('employee/account/timeoff/delegation/canceled/{id}', 'Admin\KaryawanController@delegationCancel')->name('employee.account.timeoff.delegation.cancel');
+
+    Route::post('delegation/ajax', 'Admin\KaryawanController@delegationAjax')->name('delegation.ajax');
+    Route::get('delegation-modal/{delegation_id}', 'Admin\KaryawanController@delegationModal')->name('delegationModal');
+    Route::post('employee/account/timeoff', 'Admin\KaryawanController@timeOffStore')->name('employee.account.timeoff.post');
+    Route::post('timeoffrequest/ajax', 'Admin\KaryawanController@timeoffAjax')->name('timeoffrequest');
+    Route::get('timeoff-img-modal/{id}', 'Admin\KaryawanController@imgTimeOff')->name('imgTimeOff');
+    Route::get('timeoff-modal/{id}', 'Admin\KaryawanController@timeoffModal')->name('timeoffModal');
+    Route::post('employee/account/timeoff/canceled/{id}', 'Admin\KaryawanController@timeoffCancel')->name('employee.account.timeoff.cancel');
+    Route::post('timeofftaken/ajax', 'Admin\KaryawanController@timeoffTakenAjax')->name('timeoffTaken.ajax');
+
+
+
+
+    /*Account / Time Management / Overtime*/
+    Route::get('employee/account/overtime/{id}', 'Admin\KaryawanController@overtime')->name('employee.account.overtime');
+
+    /*Account / Finance / Reimburstment*/
+    Route::get('employee/account/reimburstment/{id}', 'Admin\KaryawanController@reimburstment')->name('employee.account.reimburstment');
+
     /*karyawan / Account /  Payroll */
     Route::get('employee/payroll/info/{id}', 'Admin\KaryawanController@payrollinfo')->name('employee.payroll.info');
     Route::get('employee/payroll/payslip/{id}', 'Admin\KaryawanController@payslip')->name('employee.payroll.payslip');
+    Route::get('employee/payroll/payslip-thr/{id}', 'Admin\KaryawanController@payslipThr')->name('employee.payroll.payslip.thr');
     Route::post('employee/payroll/payslip/ajax/', 'Admin\KaryawanController@payslipAjax')->name('employee.payroll.payslip.ajax');
     Route::get('employee/payroll/payslip/detail/{id}', 'Admin\KaryawanController@payslipdetail')->name('employee.payroll.payslip.detail');
+    Route::get('employee/payroll/payslip-thr/detail/{id}', 'Admin\KaryawanController@payslipThrdetail')->name('employee.payroll.payslip.thr.detail');
     Route::get('employee/payroll/payslip/detail/download/{id}','Admin\KaryawanController@downloadpayslippdf')->name('employee.payroll.payslip.download.pdf');
+    Route::get('employee/payroll/payslip-thr/detail/download/{id}','Admin\KaryawanController@downloadpayslipThrpdf')->name('employee.payroll.payslip.thr.download.pdf');
     Route::get('employee/payroll/payslip/detail/show/password/{id}','Admin\KaryawanController@showFormPassword')->name('employee.payroll.payslip.show.password');
     Route::post('employee/payroll/payslip/detail/show/passsword/store/{id}', 'Admin\KaryawanController@storepasswordpayroll')->name('employee.payroll.payslip.show.password.store');
 
@@ -238,6 +274,8 @@ Route::group(['middleware'=>'admin'],function(){
     Route::get('/payroll/show/run','Admin\PayrollController@showrunpayroll')->name('payroll.show.run');
     Route::get('/payroll/continue/run','Admin\PayrollController@continuepayroll')->name('payroll.continue.run');
     Route::post('/payroll/continue/run-payroll','Admin\PayrollController@runpayroll')->name('payroll.run.payroll');
+    Route::get('/payroll/show/thr', 'Admin\PayrollController@showThr')->name('payroll.show.thr');
+    Route::post('/payroll/continue/run-thr','Admin\PayrollController@runThr')->name('payroll.run.thr');
 
      /* payroll General | Setting  */
      Route::get('/payroll/setting','Admin\PayrollController@component')->name('payroll.setting');
@@ -255,10 +293,9 @@ Route::group(['middleware'=>'admin'],function(){
      Route::get('/payroll/setting/component/delete/{id}','Admin\PayrollController@deleteComponent')->name('payroll.setting.component.delete');
 
     /* payroll | import payroll */
-    // Route::get('/payroll/component','Admin\ComponentPayrollController@index')->name('payroll.component');
-    // Route::Post("/payroll/component/ajax",'Admin\ComponentPayrollController@payroll')->name('payroll.component.ajax');
     Route::get('/payroll/import','Admin\ImportPayrollController@index')->name('payroll.import');
-    Route::Post("/payroll/import/ajax",'Admin\ImportPayrollController@importData')->name('payroll.import.ajax');
+    Route::post("/payroll/import/ajax",'Admin\ImportPayrollController@importData')->name('payroll.import.ajax');
+
 
      /* payroll | component */
      Route::get('/payroll/component','Admin\PayrollController@componentindex')->name('payroll.component');
@@ -305,6 +342,8 @@ Route::group(['middleware'=>'admin'],function(){
     Route::get('/payroll/report/payslip/show/{id}','Admin\PayrollController@payroll_report_payslip_show')->name('payroll.report.payslip.show');
     Route::get('/payroll/report/payslip/delete/{id}','Admin\PayrollController@payroll_report_payslip_delete')->name('payroll.report.payslip.delete');
 
+    /* payroll | Calculator */
+    Route::get('/payroll/salary-tax-calculator','Admin\CalculatorController@index')->name('payroll.calculator');
 
     /* pengguna */
     Route::get('/pengguna', 'Admin\PenggunaController@index')->name('pengguna');
@@ -339,6 +378,9 @@ Route::group(['middleware'=>'admin'],function(){
     Route::get('/permission/{id}/edit', 'Admin\PermissionController@edit')->name('permission.edit');
     Route::PUT('/permission/{id}', 'Admin\PermissionController@update')->name('permission.update');
     Route::get('/permission/{id}/destroy', 'Admin\PermissionController@destroy')->name('permission.destroy');
+
+    /* Approval*/
+    Route::get('/approval', 'Admin\ApprovalController@index')->name('approval');
 
     /* Approval Pay-leave */
     Route::get('/approval/pay-leave', 'Admin\ApprovalPLController@index')->name('pay-leave');
@@ -473,12 +515,27 @@ Route::group(['middleware'=>'admin'],function(){
     /* Account */
     Route::get('/account/{id}/index', 'Admin\AccountController@index')->name('account.index');
     Route::Post("/contract/update", 'Admin\AccountController@update')->name('account.simpan');
+
+    /* Sign Contract */
+    Route::get('/signcontract', 'Admin\SignaturePadController@index')->name('signature.index');
+    Route::get('/signaturepad', 'Admin\SignaturePadController@signature')->name('signaturepad.index');
+    Route::post('/signature', 'Admin\SignaturePadController@upload')->name('signature.upload');
+
+    /* Inbox */
+    Route::get('/inbox', 'Admin\InboxController@index')->name('inbox');
+    Route::get('/inbox/detail/{id}', 'Admin\InboxController@detail')->name('inbox.detail');
+    Route::post('/inbox/send', 'Admin\InboxController@sendMessage')->name('inbox.message');
 });
 
     /* karyawan */
     Route::get('/emp/login', 'karyawan\LoginController@index')->name('emp.login');
     Route::post('/emp/login', 'karyawan\LoginController@login')->name('emp.login');
     Route::group(['middleware' => 'emp'], function () {
+
+    /*inbox employee*/
+    Route::get('/emp/inbox', 'karyawan\InboxController@index')->name('emp.inbox');
+    Route::get('/emp/inbox/detail/{id}', 'karyawan\InboxController@detail')->name('emp.inbox.detail');
+    Route::post('/emp/inbox/send', 'karyawan\InboxController@sendMessage')->name('emp.inbox.message');
 
     /*dashboard*/
     Route::get('/emp/dashboard', 'karyawan\DashboardController@index')->name('emp.dashboard');
@@ -497,6 +554,8 @@ Route::group(['middleware'=>'admin'],function(){
     Route::get('/emp/dasboard/getnewpassword', 'karyawan\DashboardController@getnewpassword')->name('emp.dashboard.getnewpassword');
     Route::post('/emp/dasboard/newpassword', 'karyawan\DashboardController@newpassword')->name('emp.dashboard.newpassword');
 
+
+    Route::get('/emp/employees', 'karyawan\EmployeeController@index')->name('emp.employees');
 
     /*pengumuman */
     Route::post('/emp/pengumuman/ajax', 'karyawan\DashboardController@pengumumanajax')->name('emp.pengumuman.ajax');
@@ -535,9 +594,8 @@ Route::group(['middleware'=>'admin'],function(){
     Route::put('emp/account/personal/request/update/{id}', 'karyawan\AccountController@personal_request_update')->name('emp.account.personal.request.update');
 
     /* account / personal / identity /edit & update */
-    Route::put('emp/account/personal/identity/request/update/{id}', 'karyawan\AccountController@identity_request_edit')->name('emp.account.personal.identity.request.edit');
+    Route::get('emp/account/personal/identity/request/update/{id}', 'karyawan\AccountController@identity_request_edit')->name('emp.account.personal.identity.request.edit');
     Route::put('emp/account/personal/identity/request/update/{id}', 'karyawan\AccountController@identity_request_update')->name('emp.account.personal.identity.request.update');
-
 
     /*Account / Employement Data*/
     Route::get('emp/account/employeement-data/{id}', 'karyawan\AccountController@employementdata')->name('emp.account.employeement-data');
@@ -570,6 +628,29 @@ Route::group(['middleware'=>'admin'],function(){
     Route::get('emp/account/education/working/show/{id}', 'karyawan\AccountController@show_education_working')->name('emp.account.education.working.show');
     Route::get('karempyawan/account/education/working/delete/{id}', 'karyawan\AccountController@delete_education_working')->name('emp.account.education.working.delete');
 
+    /*Account / Time Management / Attendance*/
+    Route::get('emp/account/attendance/{id}', 'karyawan\AccountController@emp_attendance')->name('emp.account.attendance');
+    Route::get('emp/account/shift/{id}', 'karyawan\AccountController@emp_shift')->name('emp.account.shift');
+    Route::post('emp/account/request/shift', 'karyawan\AccountController@emp_request_shift')->name('emp.account.request.shift');
+    
+    Route::get('emp/account/timeoff/{id}', 'karyawan\AccountController@emp_timeoff')->name('emp.account.timeoff');
+    Route::get('emp/account/overtime/{id}', 'karyawan\AccountController@emp_overtime')->name('emp.account.overtime');
+    // tambahan fitur request
+    Route::post('/getEmp', 'karyawan\AccountController@getEmp')->name('getEmp');
+    Route::get('emp/account/timeoff/{id}', 'karyawan\AccountController@timeoff')->name('emp.account.timeoff');
+    Route::post('emp/account/timeoff/delegation/{id}', 'karyawan\AccountController@delegateStore')->name('emp.account.timeoff.delegation');
+    Route::post('emp/account/timeoff/delegation/canceled/{id}', 'karyawan\AccountController@delegationCancel')->name('emp.account.timeoff.delegation.cancel');
+    Route::post('emp/delegation/ajax', 'karyawan\AccountController@delegationAjax')->name('emp.delegation.ajax');
+    Route::get('emp/delegation-modal/{delegation_id}', 'karyawan\AccountController@delegationModal')->name('emp.delegationModal');
+    Route::post('emp/account/timeoff', 'karyawan\AccountController@timeOffStore')->name('emp.account.timeoff.post');
+    Route::post('emp/timeoffrequest/ajax', 'karyawan\AccountController@timeoffAjax')->name('emp.timeoffrequest');
+    Route::get('emp/timeoff-img-modal/{id}', 'karyawan\AccountController@imgTimeOff')->name('emp.imgTimeOff');
+    Route::get('emp/timeoff-modal/{id}', 'karyawan\AccountController@timeoffModal')->name('emp.timeoffModal');
+    Route::post('emp/account/timeoff/canceled/{id}', 'karyawan\AccountController@timeoffCancel')->name('emp.account.timeoff.cancel');
+    Route::post('emp/timeofftaken/ajax', 'karyawan\AccountController@timeoffTakenAjax')->name('emp.timeoffTaken.ajax');
+    // end tambahan fitur
+    Route::get('emp/account/reimburstment/{id}', 'karyawan\AccountController@emp_reimburstment')->name('emp.account.reimburstment');
+
     /*account / Payroll */
     Route::get('emp/payroll/info/{id}', 'karyawan\GajiController@payrollinfo')->name('emp.payroll.info');
     Route::get('emp/payroll/payslip/{id}', 'karyawan\GajiController@payslip')->name('emp.payroll.payslip');
@@ -578,6 +659,10 @@ Route::group(['middleware'=>'admin'],function(){
     Route::get('emp/payroll/payslip/detail/download/{id}','karyawan\GajiController@downloadpayslippdf')->name('emp.payroll.payslip.download.pdf');
     Route::get('emp/payroll/payslip/detail/show/password/{id}','karyawan\GajiController@showFormPassword')->name('emp.payroll.payslip.show.password');
     Route::post('emp/payroll/payslip/detail/show/passsword/store/{id}', 'karyawan\GajiController@storepasswordpayroll')->name('emp.payroll.payslip.show.password.store');
+
+    Route::get('emp/payroll/payslip-thr/{id}', 'karyawan\GajiController@payslip_thr')->name('emp.payroll.payslip-thr');
+    Route::get('emp/payroll/payslip-thr-detail/{id}', 'karyawan\GajiController@payslip_thr_detail')->name('emp.payroll.payslip-thr-detail');
+    Route::get('emp/payroll/payslip-thr-detail/download/{id}', 'karyawan\GajiController@downloadpayslipthrpdf')->name('emp.payroll.payslip-thr-detail.pdf');
 
     /*account /  My File */
     Route::get('emp/myfiles/{id}', 'karyawan\DocumentsController@index')->name('emp.myfile.index');
@@ -599,10 +684,27 @@ Route::group(['middleware'=>'admin'],function(){
     Route::get('emp/contract/show/{id}', 'karyawan\DocumentsController@showContract')->name('emp.contract.show');
     Route::get('emp/contract/delete/{id}', 'karyawan\DocumentsController@deleteContract')->name('emp.contract.delete');
 
+    /* Sign Contract */
+    Route::get('emp/signcontract', 'karyawan\SignaturePadController@index')->name('emp.signature.index');
+    Route::get('emp/signaturepad', 'karyawan\SignaturePadController@signature')->name('emp.signaturepad.index');
+    Route::post('emp/signature', 'karyawan\SignaturePadController@upload')->name('emp.signature.upload');
+
+     /* ajax shift */
+     Route::post('/emp/request/shift', 'karyawan\AccountController@requestShift')->name('emp.request.shift');
 
     /*logout*/
     Route::get('/karyawan/logout', 'karyawan\LoginController@logout')->name('karyawan.logout');
 });
+
+ /*Karyawan / Aktivasi*/
+ Route::get('/aktivasi/{id}','AktivasiController@index')->name('aktivasi');
+ Route::get('/aktivasi/create/{id}','AktivasiController@create')->name('aktivasi.create');
+ Route::post('/aktivasi/chgpwd','AktivasiController@changePassword')->name('aktivasi.changepwd');
+ Route::get('/aktivasi/success','AktivasiController@success')->name('aktivasi.success');
+ Route::get('/aktivasi/invalid','AktivasiController@invalid')->name('aktivasi.invalid');
+
+//activation employee id by email
+Route::get('activation/{id}',  "AktivasiController@activateEmployee")->name('email.activate');
 
 // Call     alendar Procedure
 Route::get('calendar-procedure', function () {

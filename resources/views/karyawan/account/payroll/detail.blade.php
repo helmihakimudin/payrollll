@@ -48,42 +48,48 @@
                     <div class="d-flex p-1">
                         <div class="col-5">payroll cut off</div>
                         <div class="col-auto">:</div>
-                        <div class="col">tests</div>
+                        <div class="col">{{$payslip->salary_month}}</div>
                     </div>
                     <div class="d-flex p-1">
                         <div class="col-5">ID/ Name</div>
                         <div class="col-auto">:</div>
-                        <div class="col">Sakti Tua Petrus davici Banjarnahor</div>
-                    </div> 
+                        <div class="col">{{$payslip->employee->full_name}}</div>
+                    </div>
                     <div class="d-flex p-1">
                         <div class="col-5">Organization</div>
                         <div class="col-auto">:</div>
-                        <div class="col">TADS</div>
-                    </div> 
+                        <div class="col">{{$payslip->employee->organization->name}}</div>
+                    </div>
                     <div class="d-flex p-1">
                         <div class="col-5">Grade / Level</div>
                         <div class="col-auto">:</div>
-                        <div class="col">-/ Supervisor</div>
-                    </div> 
+                        <div class="col">{{$payslip->employee->jobLevel->name}}</div>
+                    </div>
                 </div>
                 <div class="col-6">
                     <div class="d-flex p-1">
                         <div class="col-5">Job Position</div>
                         <div class="col-auto">:</div>
-                        <div class="col">Programmer Supervisor</div>
+                        <div class="col">{{$payslip->employee->jobPosition->name}}</div>
                     </div>
                     <div class="d-flex p-1">
                         <div class="col-5">PTKP</div>
                         <div class="col-auto">:</div>
-                        <div class="col">TK/0</div>
-                    </div> 
+                        <div class="col">{{$payslip->employee->ptkp_status}}</div>
+                    </div>
                     <div class="d-flex p-1">
                         <div class="col-5">NPWP</div>
                         <div class="col-auto">:</div>
-                        <div class="col">00.0000.000.0-0000.000</div>
-                    </div> 
+                        <div class="col">{{$payslip->employee->npwp}}</div>
+                    </div>
                 </div>
             </div>
+            @php
+                $jsonAllowance = json_decode($payslip->allowance);
+                $jsonDeduction = json_decode($payslip->deduction);
+                $total_allowance = (int)$employee->basic_salary;
+                $total_deductions = 0;
+            @endphp
             <div class="row pt-5">
                 <div class="col-lg-6 col-merge border">
                     <table class="table">
@@ -93,14 +99,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td> <small>Basic Salary</small></td><td class="text-right"><small>Rp. 3.500.000</small></td>
-                            </tr>
-                            <tr>
-                                <td><small>Tunjangan Jabatan</small></td><td class="text-right"><small>Rp.1.500.000</small></td>
-                            </tr>
+                            @php
+                                foreach($jsonAllowance as $rows)
+                                {
+                                    $total_allowance += empty($rows->amount) ? 0 : (int)$rows->amount;
+                                }
+                            @endphp
+                                <tr>
+                                    <td class="font-arial"><small>Basic Salary</small></td><td style="text-align:right;"><small>Rp. {{number_format($employee->basic_salary)}}</small></td>
+                                </tr>
+                            @foreach($jsonAllowance as $rows)
+                                <tr>
+                                    <td class="font-arial"><small>{{$rows->component}}</small></td><td style="text-align:right;"><small>@currency($rows->amount)</small></td>
+                                </tr>
+                            @endforeach
                         </tbody>
-                    </table>  
+                    </table>
                 </div>
                 <div class="col-lg-6 col-merge border">
                     <table class="table">
@@ -110,37 +124,36 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                foreach($jsonDeduction as $rows)
+                                {
+                                    $total_deductions += empty($rows->amount) ? 0 : (int)$rows->amount;
+                                }
+                            @endphp
+                            @foreach($jsonDeduction as $rows)
+                                <tr>
+                                    <td> <small>{{$rows->component}}</small></td><td style="text-align:right;"><small>@currency($rows->amount)</small></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-6 col-merge border">
+                    <table class="table m-0">
+                        <tbody>
                             <tr>
-                                <td> <small>BPJS kesehatan</small></td><td class="text-right"><small>Rp. 3.500.000</small></td>
-                            </tr>
-                            <tr>
-                                <td><small>JHT Employee</small></td><td class="text-right"><small>Rp.1.500.000</small></td>
-                            </tr>
-                            <tr>
-                                <td><small>Potongan Keterlambatan</small></td><td class="text-right"><small>Rp.1.500.000</small></td>
-                            </tr>
-                            <tr>
-                                <td><small>Potongan Pph 21</small></td><td class="text-right"><small>Rp.1.500.000</small></td>
+                                <td class="font-arial-bold"><small>Total Earnings</small></td><td style="text-align:right;" class="font-arial-bold"><small>Rp. {{number_format($total_allowance)}}</small></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="col-lg-6 col-merge border">
                     <table class="table m-0">
-                        <thead class="thead-light">
+                        <tbody>
                             <tr>
-                                <th colspan="2">Total earnings</th><th class="text-right">Rp. 3.500.000</th>
+                                <td class="font-arial-bold"><small>Total Deductions</small></td><td style="text-align:right;" class="font-arial-bold"><small>@currency($total_deductions)</small></td>
                             </tr>
-                        </thead>
-                    </table>
-                </div>
-                <div class="col-lg-6 col-merge border">
-                    <table class="table m-0">
-                        <thead class="thead-light">
-                            <tr>
-                                <th colspan="2">Total Deductions</th><th class="text-right">Rp. 3.500.000</th>
-                            </tr>
-                        </thead>
+                        </tbody>
                     </table>
                 </div>
                 <div class="col-lg-6 col-merge">
@@ -156,7 +169,7 @@
                     <table class="table m-0 no-border">
                         <thead>
                             <tr >
-                                <th colspan="2" style="font-size:18px;">Take Home Pays</th><th class="text-right" style="font-size:18px;">Rp. 4.130.000</th>
+                                <th colspan="2" style="font-size:18px;">Take Home Pays</th><th class="text-right" style="font-size:18px;">@currency($total_allowance-$total_deductions)</th>
                             </tr>
                         </thead>
                     </table>
@@ -185,7 +198,7 @@
                                 <td><small>BPJS Kesehatan Company</small></td><td class="text-right"><small>Rp. 280.000</small></td>
                             </tr>
                         </tbody>
-                    </table>  
+                    </table>
                 </div>
                 <div class="col-lg-6 col-merge">
                     <table class="table">
@@ -216,7 +229,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div> 
+            </div>
             <div class="row pt-5">
                 <p class="text-dark justify-content-center">
                     <small>*These are the benefits you'll get from the company, but not included in your take-home pay (THP).</small>
@@ -237,11 +250,8 @@
             </div>
             <div  class="row pt-5">
                 <div class="col">
-                    <small class="font-weight-bold text-dark">This payslip generated by Talenta.co</small>
-                </div> 
-                <div class="col text-right">
-                    <a href="https://hr.talenta.co" target="_blank" class="font-weight-bold"><small dclass="font-weight-bold text-dark">https://duasisi.id</small></a>
-                </div> 
+                    <small class="font-weight-bold text-dark">This payslip generated by E-Smart</small>
+                </div>
             </div>
         </div>
     </div>

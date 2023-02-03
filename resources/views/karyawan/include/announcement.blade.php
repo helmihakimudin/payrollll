@@ -14,13 +14,13 @@
                             </div>
                             <div class="kt-widget__content" id="content-post{{$p->id}}">
                                 <div class="kt-widget__head">
-                                    <a href="#" class="kt-widget__username">
+                                    <div class="kt-widget__username">
                                         {{$p->name}}
                                         <i class="flaticon2-correct kt-font-success"></i>
-                                    </a>
+                                    </div>
                                 </div>
                                 <div class="kt-widget__subhead">
-                                    <a href="#"><i class="flaticon-calendar-3"></i>{{date('d M Y h:i:s',strtotime($p->created_at))}} wib</a>
+                                    <a><i class="flaticon-calendar-3"></i>{{date('d M Y h:i:s',strtotime($p->created_at))}} wib</a>
                                 </div>
                                 <div>
                                     &nbsp;

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\karyawan;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Karyawan;
+use App\Employee;
 use App\Payslip;
 use App\Designation;
 use App\Branch;
@@ -18,6 +19,7 @@ use DB;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 use App\Http\Controllers\karyawan\AccountController;
+use Illuminate\Support\Carbon;
 
 class GajiController extends Controller
 {
@@ -36,7 +38,7 @@ class GajiController extends Controller
 
     public function payslip($id){
         $karyawan = Karyawan::find($id);
-        $initial = $this->accountContrller->getinitialname(Auth::guard("emp")->user()->name);
+        $initial = $this->accountContrller->getinitialname(Auth::guard("emp")->user()->full_name);
         return view('karyawan.account.payroll.payslip',compact('karyawan','initial'));
     }
 
@@ -49,15 +51,14 @@ class GajiController extends Controller
         $start  = $request->input('start');
         $order  = $column[$request->input('order.0.column')];
         $dir  = $request->input('order.0.dir');
-        
+
         $temp  = Payslip::join('employees','pay_slips.employee_id','=','employees.id')
-                ->join('payslip_types','employees.salary_type','=','payslip_types.id')
                 ->select('pay_slips.id','pay_slips.salary_month',"pay_slips.id as payroll_cut_off",'pay_slips.id as actions')
                 ->where('pay_slips.employee_id',Auth::guard('emp')->user()->id)
                 ->orderBy('pay_slips.salary_month','DESC');
         $total = $temp->count();
         $totalFiltered = $total;
-    
+
         if (empty($request->input('search.value'))) {
             $boot  = $temp->offset($start)
               ->orderBy($order,$dir)
@@ -117,13 +118,16 @@ class GajiController extends Controller
 
     public function payslipdetail($id){
         $payslip = Payslip::find($id);
-        $initial = $this->accountContrller->getinitialname(Auth::guard("emp")->user()->name);
-        return view('karyawan.account.payroll.detail',compact('payslip','initial'));
+        $initial = $this->accountContrller->getinitialname(Auth::guard("emp")->user()->full_name);
+        $employee = Employee::find($payslip->employee_id);
+        $desgination = Designation::find($employee->designation_id);
+        $signature = User::find($payslip->created_by);
+        return view('karyawan.account.payroll.detail',compact('payslip','initial','employee','desgination','signature'));
     }
 
     public function downloadpayslippdf($id){
         $payslip = DB::table('pay_slips')->where('id',$id)->latest()->first();
-        $employee = Karyawan::find($payslip->employee_id);
+        $employee = Employee::find($payslip->employee_id);
         $desgination = Designation::find($employee->designation_id);
         $signature = User::find($payslip->created_by);
         $mpdf = new \Mpdf\Mpdf([
@@ -137,6 +141,37 @@ class GajiController extends Controller
         ]);
         $mpdf->SetTitle($employee->name.' | '.date('F Y',strtotime($payslip->salary_month)));
         $mpdf->WriteHTML(view('karyawan.account.payroll.print-payslip',compact('payslip','employee','desgination','signature')));
+        $mpdf->Output();
+    }
+
+
+    public function payslip_thr($id){
+        $karyawan = Karyawan::find($id);
+        $initial = $this->accountContrller->getinitialname(Auth::guard("emp")->user()->name);
+        return view('karyawan.account.payroll.payslip-thr',compact('karyawan','initial'));
+    }
+    public function payslip_thr_detail($id){
+        $karyawan = Karyawan::find($id);
+        $initial = $this->accountContrller->getinitialname(Auth::guard("emp")->user()->name);
+        return view('karyawan.account.payroll.payslip-thr-detail',compact('karyawan','initial'));
+    }
+
+    public function downloadpayslipthrpdf($id){
+        $payslip = DB::table('pay_slips')->where('id',$id)->latest()->first();
+        $employee = Karyawan::find($id);
+        // $desgination = Designation::find($employee->designation_id);
+        // $signature = User::find($payslip->created_by);
+        $mpdf = new \Mpdf\Mpdf([
+            'tempDir' => storage_path().'/app/public/pdf',
+            'format' => 'A4-P',
+            'margin_left'=>10,
+            'margin_right'=>10,
+            'margin_top'=>10,
+            'margin_bottom'=>15,
+            'margin_header'=>10,
+        ]);
+        $mpdf->SetTitle($employee->name.' | ');
+        $mpdf->WriteHTML(view('karyawan.account.payroll.print-payslip-thr',compact('payslip','employee')));
         $mpdf->Output();
     }
 

@@ -8,89 +8,70 @@
 @include('admin.payslip-type.modal')
 <div class="kt-body kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-grid--stretch" id="kt_body">
     <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
-        <div class="kt-subheader   kt-grid__item" id="kt_subheader">
-            <div class="kt-container pt-3">
+        <div class="kt-subheader kt-grid__item" id="kt_subheader">
+            <div class="kt-container">
                 <div class="kt-subheader__main">
                     <h1 class="kt-subheader__title">
                         Welcome to payroll E- Smart
                     </h1>
                     <span class="kt-subheader__separator kt-subheader__separator--v"></span>
                     <div class="kt-subheader__group" id="kt_subheader_search">
-                        <h3 class="kt-subheader__desc">
+                        <h3 class="kt-subheader__desc m-0">
                           PT DUAISI SEJAHTERA
                         </h3>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="kt-container  kt-grid__item kt-grid__item--fluid pt-5">
-            <div class="row pt-5 pl-5 pr-5">
-                <div class="col-3">
-                    <div class="container">
-                        <a href="{{route("payroll.component")}}">
-                            <img src="{{asset("image/update_payroll.jpg")}}" width="100%" alt="image">
-                            <div class="bottom-left text-image-cover">Update Payroll Component</div>
-                        </a>
-                    </div>
+        <div class="kt-container kt-grid__item kt-grid__item--fluid">
+            <div class="row">
+                <div class="col-3 mb-lg-4">
+                    <a href="{{route("payroll.component")}}">
+                        <img src="{{asset("image/update_payroll.jpg")}}" class="rounded" width="100%" alt="image">
+                        <div class="bottom-left text-image-cover">Update Payroll Component</div>
+                    </a>
+                </div>
+                <div class="col-3 mb-lg-4">
+                    <a href="javascript:;" data-attr="{{route('payroll.show.run')}}" class="btn-run-payroll">
+                        <img src="{{asset("image/run_payroll.jpg")}}" class="rounded" width="100%" alt="image">
+                        <div class="bottom-left text-image-cover">Run Payroll</div>
+                    </a>
+                </div>
+                <div class="col-3 mb-lg-4">
+                    <a href="{{route('payroll.report')}}">
+                        <img src="{{asset("image/view_report.jpg")}}" class="rounded" width="100%" alt="image">
+                        <div class="bottom-left text-image-cover">View Report</div>
+                    </a>
+                </div>
+                <div class="col-3 mb-lg-4">
+                    <a href="{{route('payroll.setting')}}">
+                        <img src="{{asset("image/setting.jpg")}}" class="rounded" width="100%" alt="image">
+                        <div class="bottom-left text-image-cover">Settings</div>
+                    </a>
                 </div>
                 <div class="col-3">
-                    <div class="container">
-                        <a href="javascript:;" data-attr="{{route('payroll.show.run')}}" class="btn-run-payroll">
-                            <img src="{{asset("image/run_payroll.jpg")}}" width="100%" alt="image">
-                            <div class="bottom-left text-image-cover">Run Payroll</div>
-                        </a>
-                    </div>
+                    <a href="{{route('payroll.import')}}">
+                        <img src="{{asset("image/import_payroll.jpg")}}" class="rounded" width="100%" alt="image">
+                        <div class="bottom-left text-image-cover">Import Payroll</div>
+                    </a>
                 </div>
                 <div class="col-3">
-                    <div class="container">
-                        <a href="{{route('payroll.report')}}">
-                            <img src="{{asset("image/view_report.jpg")}}" width="100%" alt="image">
-                            <div class="bottom-left text-image-cover">View Report</div>
-                        </a>
-                    </div>
+                    <a href="{{route('payroll.show.thr')}}">
+                        <img src="{{asset("image/run_thr.jpg")}}" width="100%" alt="image">
+                        <div class="bottom-left text-image-cover">Run THR</div>
+                    </a>
                 </div>
                 <div class="col-3">
-                    <div class="container">
-                        <a href="{{route('payroll.setting')}}">
-                            <img src="{{asset("image/setting.jpg")}}" width="100%" alt="image">
-                            <div class="bottom-left text-image-cover">Settings</div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row pt-5 pl-5 pr-5">
-                <div class="col-3">
-                    <div class="container">
-                        <a href="{{route('payroll.import')}}">
-                            <img src="{{asset("image/import_payroll.jpg")}}" width="100%" alt="image">
-                            <div class="bottom-left text-image-cover">Import Payroll</div>
-                        </a>
-                    </div>
+                    <a href="">
+                        <img src="{{asset("image/ex_employee-1.jpg")}}" width="100%" alt="image">
+                        <div class="bottom-left text-image-cover">Ex Employee Allowance </div>
+                    </a>
                 </div>
                 <div class="col-3">
-                    <div class="container">
-                        <a href="">
-                            <img src="{{asset("image/run_thr.jpg")}}" width="100%" alt="image">
-                            <div class="bottom-left text-image-cover">Run THR</div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="container">
-                        <a href="">
-                            <img src="{{asset("image/ex_employee-1.jpg")}}" width="100%" alt="image">
-                            <div class="bottom-left text-image-cover">Ex Employee Allowance </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="container">
-                        <a href="">
-                            <img src="{{asset("image/salary_tax-1.jpg")}}" width="100%" alt="image">
-                            <div class="bottom-left text-image-cover">Salary Tax Calculator</div>
-                        </a>
-                    </div>
+                    <a href="{{route('payroll.calculator')}}">
+                        <img src="{{asset("image/salary_tax-1.jpg")}}" width="100%" alt="image">
+                        <div class="bottom-left text-image-cover">Salary Tax Calculator</div>
+                    </a>
                 </div>
             </div>
         </div>

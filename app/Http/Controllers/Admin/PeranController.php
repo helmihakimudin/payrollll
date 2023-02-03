@@ -121,11 +121,13 @@ class PeranController extends Controller
             $peran->save();
 
             $permission = $request->permission_id;
-            foreach($permission as $i => $row){
-                $p    = Permission::where('id', '=', $row)->firstOrFail();
-                $role = Role::where('name', '=', $peran->name)->first();
-                $role->givePermissionTo($p);
+            if(is_array($permission)){
+                foreach($permission as $i => $row){
+                    $p    = Permission::where('id', '=', $row)->firstOrFail();
+                    $role = Role::where('name', '=', $peran->name)->first();
+                    $role->givePermissionTo($p);
 
+                }
             }
             return redirect()->route('peran')->with(['success'=>'Rules Successfull Created !']);
         }

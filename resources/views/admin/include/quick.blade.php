@@ -8,9 +8,9 @@
     </div>
     <div class="kt-portlet__body">
         <div class="kt-todo__nav">
-            <ul class="kt-nav">
+            <ul class="kt-nav p-0">
                 <li class="kt-nav__item">
-                    <a href="#" class="kt-nav__link" data-action="list" data-type="inbox">
+                    <a href="{{route('employee.account', $employee['id'])}}" class="kt-nav__link" data-action="list" data-type="inbox">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-nav__link-icon">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                 <rect x="0" y="0" width="24" height="24"></rect>
@@ -34,7 +34,7 @@
                         
                     </a>
                 </li>
-                <li class="kt-nav__item">
+                {{-- <li class="kt-nav__item">
                     <a href="#" class="kt-nav__link" data-action="list" data-type="inbox">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-nav__link-icon">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -57,7 +57,7 @@
                         </svg>
                         <span class="kt-nav__link-text">Company Settings</span>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </div>
     </div>

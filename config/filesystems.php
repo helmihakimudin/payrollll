@@ -65,6 +65,16 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
+        'gcs' => [
+            'driver' => 'gcs',
+            'project_id' => env('GOOGLE_CLOUD_PROJECT_ID', 'payroll-f5ba7'),
+            'key_file' => env('GOOGLE_CLOUD_KEY_FILE', base_path()."\firebase-credential.json"),
+            'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET', 'payroll-f5ba7.appspot.com'),
+            'path_prefix' => env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', null),
+            'storage_api_uri' => env('GOOGLE_CLOUD_STORAGE_API_URI', null),
+            'visibility' => 'public',
+        ],
+
     ],
 
     /*

@@ -43,51 +43,130 @@
                 <h3 class="kt-portlet__head-title">Overtime</h3>
             </div>
             <div class="kt-portlet__head-toolbar">
-                <a href="{{ route('timeoff')}}" class="btn btn-sm btn-brand btn-elevate mx-3 btn-icon-sm">
+                <button data-toggle="modal" data-target="#kt_modal_2" class="btn btn-sm btn-brand btn-elevate mx-3 btn-icon-sm">
                     <i class="la la-plus"></i>
                     Request Overtime
-                </a>
-                <a href="{{ route('timeoff')}}" class="btn btn-sm btn-secondary btn-elevate mx-3 btn-icon-sm">
+                </button>
+                <button type="button" data-toggle="modal" data-target="#kt_modal_3" class="btn btn-sm btn-secondary btn-elevate btn-icon-sm">
                     <i class="la la-upload"></i>
                     Import Overtime
-                </a>
+                </button>
             </div>
         </div>
         <div class="kt-portlet__body">
             <div class="row">
-                <div class="col-lg-12">
-                    <!--begin: Datatable -->
-                    <table class="table table-striped- table-bordered table-hover table-checkable kt_table_1 mt-0">
-                        <thead>
-                            <tr>
-                                <th>Request date</th>
-                                <th>Overtime date</th>
-                                <th>Employee ID</th>
-                                <th>Employee</th>
-                                <th>Compensation</th>
-                                <th>Duration</th>
-                                <th>Status</th>
-                                <th>View</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>19 Dec 2022</td>
-                                <td>16 Dec 2022</td>
-                                <td>DMY006</td>
-                                <td>Dummy</td>
-                                <td>Paid Overtime</td>
-                                <td>2h</td>
-                                <td>0</td>
-                                <td><a href="#" class="kt-link" data-toggle="modal" data-target="#kt_modal_1">Detail</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!--end: Datatable -->
-                </div>
+							<div class="col-lg-12">
+								<!--begin: Datatable -->
+								<table class="table table-striped- table-bordered table-hover table-checkable kt_table_1 mt-0">
+										<thead>
+												<tr>
+														<th>Request date</th>
+														<th>Overtime date</th>
+														<th>Employee ID</th>
+														<th>Employee</th>
+														<th>Compensation</th>
+														<th>Duration</th>
+														<th>Status</th>
+														<th>View</th>
+												</tr>
+										</thead>
+										<tbody>
+												<tr>
+														<td>19 Dec 2022</td>
+														<td>16 Dec 2022</td>
+														<td>DMY006</td>
+														<td>Dummy</td>
+														<td>Paid Overtime</td>
+														<td>2h</td>
+														<td>0</td>
+														<td><a href="#" class="kt-link" data-toggle="modal" data-target="#kt_modal_1">Detail</a></td>
+												</tr>
+										</tbody>
+								</table>
+								<!--end: Datatable -->
+							</div>
             </div>
         </div>
     </div>
+
+		<!-- Modal Create -->
+    <div class="modal fade" id="kt_modal_2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-content">
+								<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Overtime Request</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										</button>
+								</div>
+								<form class="kt-form" action="">
+									<div class="modal-body">
+										<div class="form-group">
+											 	<label for="employee">Employee<span class="text-danger">*</span></label>
+												<select class="form-control kt-select2" id="employee" name="employee">
+														<option></option>
+														<option>DMY001 - Sintia</option>
+														<option>DMY002 - Dela</option>
+														<option>DMY003 - Arif</option>
+												</select>
+										</div>
+										<div class="form-group">
+												<label>Date<span class="text-danger">*</span></label>
+												<div class="input-group date">
+														<input type="text" class="form-control" readonly="" value="05/20/2017" id="kt_datepicker_3">
+														<div class="input-group-append">
+																<span class="input-group-text">
+																		<i class="la la-calendar"></i>
+																</span>
+														</div>
+												</div>
+										</div>
+										<div class="form-group">
+												<label for="compensation">Compensation<span class="text-danger">*</span></label>
+												<select class="form-control" disabled id="compensation" name="compensation">
+														<option>Paid Overtime</option>
+														<option>Overtime Leave</option>
+												</select>
+										</div>
+										<div class="form-group row">
+											<div class="col-lg-4">
+												<label for="type">Type<span class="text-danger">*</span></label>
+												<select class="form-control kt-select2" id="type" name="type">
+														<option selected disabled>Pilih Salah Satu</option>
+														<option>Before Shift</option>
+														<option>After Shift</option>
+												</select>
+											</div>
+											<div class="col-lg-4">
+												<label>Duration<span class="text-danger">*</span></label>
+												<div class="input-group">
+													<input type="text" class="form-control kt_timepicker" placeholder="00:00">
+													<div class="input-group-append">
+														<span class="input-group-text">
+															<i class="la la-clock-o"></i>
+														</span>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-4">
+												<label>Break (minutes)<span class="text-danger">*</span></label>
+												<div class="input-group">
+													<input type="text" class="form-control" placeholder="1">
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+												<label for="notes">Notes<span class="text-danger">*</span></label>
+												<textarea class="form-control" id="notes" rows="3"></textarea>
+										</div>
+									</div>
+									<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+											<button type="submit" class="btn btn-primary">Submit</button>
+									</div>
+								</form>
+						</div>
+				</div>
+		</div>
 
 		<!-- Modal Detail -->
     <div class="modal fade" id="kt_modal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -241,10 +320,50 @@
 						</div>
 				</div>
 		</div>
+
+		<!-- Modal Import -->
+    <div class="modal fade" id="kt_modal_3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-md" role="document">
+						<div class="modal-content">
+								<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Import</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										</button>
+								</div>
+								<div class="modal-body">
+									<h5>Download and complete the template</h5>
+									<p>Download template below and write your data.</p>
+
+									<a href="#" class="bg-secondary w-100 d-flex rounded justify-content-between p-3 align-items-center">
+										<h6 class="m-0 d-flex align-items-center"><i class="fa fa-file-alt mr-3"></i>Template_Overtime_Request.xlsx</h6>
+										<div><i class="fa fa-download"></i></div>
+									</a>
+
+									<p class="mb-0 mt-3 kt-font-bold">Few tips:</p>
+									<ul>
+										<li>Make sure employee ID is correct</li>
+										<li>Click column header on spreadsheet to read instruction</li>
+									</ul>
+									<form action="">
+										<div class="form-group m-0">
+											<label for="importExportTemplate" class="form-group-label">Upload spreadsheet</label>
+											<div class="custom-file">
+												<input id="importExportTemplate" type="file" accept=".xls,.xlsx" class="custom-file-input">
+												<label for="importExportTemplate" class="custom-file-label is-ellipsis">No file selected</label>
+											</div>
+										</div>
+									</form>
+								</div>
+								<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-success">Submit</button>
+								</div>
+						</div>
+				</div>
+		</div>
 @endsection
 @push('scriptjs')
 <script src="{{ asset('demo10/assets/js/pages/crud/forms/widgets/bootstrap-datepicker.js')}}" type="text/javascript"></script>
-<script src="{{ asset('demo10/assets/js/pages/dashboard.js')}}" type="text/javascript"></script>
 <script>
 		var initTable1 = function () {
 				var table = $(".kt_table_1");
@@ -280,5 +399,22 @@
 						],
 				});
 		}();
+
+		$('.kt-select2').select2({
+				placeholder: "Select on option",
+		});
+
+		$('.kt_timepicker').datetimepicker({
+				format: "hh:ii",
+				todayHighlight: true,
+				autoclose: true,
+				startView: 1,
+				minView: 0,
+				maxView: 1,
+				forceParse: 0,
+				pickerPosition: 'bottom-left',
+				language: moment.locale('id')
+		});
+
 </script>
 @endpush

@@ -22,7 +22,7 @@
                     </ul>
                 </div>
             </li>
-            <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+            <li class="kt-menu__item  kt-menu__item--submenu @if($pages =='time-management') {{" kt-menu__item--active kt-menu__item--open"}} @endif" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
                 <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
                     <span class="kt-menu__link-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
@@ -37,9 +37,10 @@
                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                     <ul class="kt-menu__subnav">
                         <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Time Management</span></span></li>
-                        <li class="kt-menu__item"><a href="javascript:;" class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Attendance</span><span class="kt-menu__link-badge"></span></a></li>
-                        <li class="kt-menu__item"><a href="javascript:;" class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">TimeOff</span><span class="kt-menu__link-badge"></span></a></li>
-                        <li class="kt-menu__item"><a href="javascript:;" class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">OverTime</span><span class="kt-menu__link-badge"></span></a></li>
+                        <li class="kt-menu__item @if($subpages =='attendance') {{" kt-menu__item--active kt-menu__item--open"}} @endif"><a href="{{route('emp.account.attendance',Auth::guard('emp')->user()->id)}}" class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Attendance</span><span class="kt-menu__link-badge"></span></a></li>
+                        <li class="kt-menu__item @if($subpages =='shift') {{" kt-menu__item--active kt-menu__item--open"}} @endif"><a href="{{route('emp.account.shift',Auth::guard('emp')->user()->id)}}" class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Shift</span><span class="kt-menu__link-badge"></span></a></li>
+                        <li class="kt-menu__item @if($subpages =='timeoff') {{" kt-menu__item--active kt-menu__item--open"}} @endif"><a href="{{route('emp.account.timeoff',Auth::guard('emp')->user()->id)}}" class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">TimeOff</span><span class="kt-menu__link-badge"></span></a></li>
+                        <li class="kt-menu__item @if($subpages =='overtime') {{" kt-menu__item--active kt-menu__item--open"}} @endif"><a href="{{route('emp.account.overtime',Auth::guard('emp')->user()->id)}}" class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">OverTime</span><span class="kt-menu__link-badge"></span></a></li>
                     </ul>
                 </div>
             </li>
@@ -60,11 +61,11 @@
                         <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Payroll</span></span></li>
                         <li class="kt-menu__item @if($subpages =='payroll-info') {{" kt-menu__item--active kt-menu__item--open"}}   @endif"><a href="{{route('emp.payroll.info',Auth::guard("emp")->user()->id)}}" class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Payroll Info</span><span class="kt-menu__link-badge"></span></a></li>
                         <li class="kt-menu__item @if($subpages =='payroll-payslip') {{" kt-menu__item--active kt-menu__item--open"}} @endif"><a  href="{{route('emp.payroll.payslip',Auth::guard("emp")->user()->id)}}"class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Payslip</span><span class="kt-menu__link-badge"></span></a></li>
-                       
+                        <li class="kt-menu__item @if($subpages =='payslip-thr') {{" kt-menu__item--active kt-menu__item--open"}} @endif"><a  href="{{route('emp.payroll.payslip-thr',Auth::guard("emp")->user()->id)}}" class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Payslip THR</span><span class="kt-menu__link-badge"></span></a></li>
                     </ul>
                 </div>
             </li>
-            <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+            <li class="kt-menu__item  kt-menu__item--submenu  @if($pages =='finance') {{" kt-menu__item--active kt-menu__item--open"}} @endif" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
                 <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
                     <span class="kt-menu__link-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
@@ -79,9 +80,9 @@
                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                     <ul class="kt-menu__subnav">
                         <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Finance</span></span></li>
-                        <li class="kt-menu__item"><a href="javascript:;" class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Reimburstment</span><span class="kt-menu__link-badge"></span></a></li>
-                        <li class="kt-menu__item"><a href="javascript:;" class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Loan</span><span class="kt-menu__link-badge"></span></a></li>
-                        <li class="kt-menu__item"><a href="javascript:;" class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Cash Advance</span><span class="kt-menu__link-badge"></span></a></li>
+                        <li class="kt-menu__item @if($subpages =='reimburstment') {{" kt-menu__item--active kt-menu__item--open"}} @endif"><a href="{{route('emp.account.reimburstment',Auth::guard('emp')->user()->id)}}" class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Reimburstment</span><span class="kt-menu__link-badge"></span></a></li>
+                        {{-- <li class="kt-menu__item"><a href="javascript:;" class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Loan</span><span class="kt-menu__link-badge"></span></a></li>
+                        <li class="kt-menu__item"><a href="javascript:;" class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--line"><span></span></i><span class="kt-menu__link-text">Cash Advance</span><span class="kt-menu__link-badge"></span></a></li> --}}
                     </ul>
                 </div>
             </li>

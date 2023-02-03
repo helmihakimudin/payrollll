@@ -14,7 +14,7 @@ class AddColumnShifts extends Migration
     public function up()
     {
         Schema::table('shifts', function (Blueprint $table) {
-            $table->integer('schedule_id')->nullable();
+            $table->dropColumn('schedule_id');
             $table->integer('show_in_request')->nullable()->default(0);
             $table->integer('clock_in_dispensation')->nullable();
             $table->integer('clock_out_dispensation')->nullable();

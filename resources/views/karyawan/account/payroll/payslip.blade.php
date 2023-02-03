@@ -12,7 +12,7 @@
             </h3>
         </div>
         <div class="kt-portlet__head-toolbar">
-            
+
         </div>
     </div>
     <div class="kt-portlet__body">
@@ -29,7 +29,7 @@
                     </tbody>
                 </table>
             </div>
-           
+
         </div>
     </div>
     <!--end::Form-->

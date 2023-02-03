@@ -42,6 +42,10 @@
                     <i class="la la-plus"></i>
                     Create Time Off
                 </a>
+                <a href="{{route('timeoff.log')}}" class="btn btn-sm btn-secondary btn-elevate ml-3 btn-icon-sm">
+                    <i class="la la-history"></i>
+                    Log History
+                </a>
                 <a href="{{route('timeoff.setting')}}" class="btn btn-sm btn-secondary btn-elevate mx-3 btn-icon-sm">
                     <i class="la la-info-circle"></i>
                     View Setting
@@ -75,10 +79,10 @@
                                     <h5 class="mb-3">UPDATE TIME OFF BALANCE VIA EXCEL</h5>
                                     <p class="kt-callout__desc">
                                         <div class="d-flex my-3">
-                                            <a href="{{ route('exportTimeoffassign') }}" target="_blank" class="btn btn-outline-dark btn-sm" id="ExportAssignEmployee">Export Template</a>
+                                            <a href="{{ route('exportTimeoffassign') }}" class="btn btn-outline-dark btn-sm" id="ExportAssignEmployee">Export</a>
                                             {{-- <a href="{{ asset('public\download\format-employee.xlsx')}}" target="_blank" class="btn btn-outline-dark btn-sm" id="ExportAssignEmployee">Export Template</a> --}}
                                             <div class="dropzone-panel">
-                                                <a href="javascript:void(0);" class="dropzone-select px-5 btn ml-3 btn btn-outline-dark btn-sm" >Import</a>
+                                                <a href="javascript:void(0);" class="dropzone-select px-5 btn ml-3 btn btn-outline-dark btn-sm" data-toggle="modal" data-target="#importgaji">Import</a>
                                             </div>
                                         </div>
                                     </p>
@@ -87,6 +91,39 @@
                         </div>
                     </div>
                 </div>
+                {{-- Modal Import --}}
+                <div class="modal fade" id="importgaji" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="exampleModalSizeLg" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Import Data</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <i aria-hidden="true" class="ki ki-close"></i>
+                                </button>
+                            </div>
+                            <form action="{{route('importTimeoffassign')}}" method="POST" enctype="multipart/form-data">
+                                {{ csrf_field() }}
+                                <div class="modal-body">
+                                    <div class="group">
+                                        <div class="form-group text-center">
+                                            <label>Import Data</label><br>
+                                            <input type="file" name="import" id="upload" class="form-control mb-3">
+                                            <svg style="cursor: pointer;" onclick="functionUpload()"  xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="green" class="bi bi-cloud-upload-fill" viewBox="0 0 16 16" >
+                                                <path fill-rule="evenodd" d="M8 0a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11h4.188C14.502 11 16 9.57 16 7.773c0-1.636-1.242-2.969-2.834-3.194C12.923 1.999 10.69 0 8 0zm-.5 14.5V11h1v3.5a.5.5 0 0 1-1 0z"/>
+                                              </svg>
+                                            <span id="namafile" style="font-size:16px;" class="form-text text-muted">Please Import File (Xls)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary font-weight-bold">Import</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {{-- End Modal Import --}}
                 <div class="col-lg-9">
                     <!--begin: Datatable -->
                     <table class="table table-striped- table-bordered table-hover table-checkable kt_table_1 mt-0" id="timeoffIndexTable">
@@ -96,7 +133,6 @@
                                 <th>Code</th>
                                 <th>Effective Date</th>
                                 <th>Expired Date</th>
-                                <th>Log</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -148,9 +184,9 @@
                                 </select>
                             </div>
                             <div class="col-lg-6">
-                                <label>Current Date</label>
+                                <label id="cd_label">Current Date</label>
                                 <div class="input-group date">
-                                    <input type="text" class="form-control datepicker" readonly="" id="current_date" id="kt_datepicker_3">
+                                    <input type="text" class="form-control datepicker" readonly="" id="current_date">
                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-calendar"></i>
@@ -162,7 +198,7 @@
                         
                         <div class="form-group row align-items-center">
                             <div class="col-lg-6">
-                                <div style="" class="join" hidden>
+                                <div style="" class="joins" hidden>
                                     <label>Join Date</label>
                                     <div class="input-group date col-lg-6">
                                         <input type="text" class="form-control" readonly="" id="jd">
@@ -177,11 +213,11 @@
                             <div class="col-lg-6">
                                 <div class="kt-radio-inline">
                                     <label class="kt-radio kt-radio--bold kt-radio--success">
-                                        <input type="radio" value="0" name="radio2" checked> Employee
+                                        <input type="radio" value="0" name="radio2" id="employee_radio" checked> Employee
                                         <span></span>
                                     </label>
                                     <label class="kt-radio kt-radio--bold kt-radio--success">
-                                        <input type="radio" value="1" name="radio2"> Join Date
+                                        <input type="radio" value="1" name="radio2" id="joindate_radio"> Join Date
                                         <span></span>
                                     </label>
                                 </div>
@@ -195,7 +231,7 @@
                                 <div style="display:none" class="join">
                                     <label>Join Date</label>
                                     <div class="input-group date">
-                                        <input type="text" class="form-control datepicker" readonly="" id="kt_datepicker_3">
+                                        <input type="text" class="form-control datepicker" readonly="" id="join_date">
                                         <div class="input-group-append">
                                             <span class="input-group-text">
                                                 <i class="la la-calendar"></i>
@@ -211,7 +247,7 @@
                             <div class="text-center bg-secondary p-2 my-3">
                                 <p class="m-0" >Active balance for <b id="namaEmp">{Employee Name}</b> in <b id="currentDate">{Current Date}</b> is <b id="diffyear">{0}</b> days</p>
                             </div>
-                            <table class="table table-striped- table-bordered m-0 kt_table_1" id="tbsimulate" style="display: none">
+                            <table class="table table-striped- table-bordered m-0 kt_table_1"  style="display: none" id="tbsimulate_table">
                                 <thead>
                                     <tr>
                                         <th>Effective Date</th>
@@ -219,7 +255,7 @@
                                         <th>Balance</th>
                                     </tr>
                                 </thead>
-                                <tbody >
+                                <tbody id="tbsimulate">
                                     
                                 </tbody>
                             </table>
@@ -267,7 +303,7 @@
                                 <div class="form-group">
                                     <label>Effective as off</label>
                                     <div class="input-group date">
-                                        <input type="text" id="effective_date" name="effective_date" class="form-control datepicker" readonly="" id="kt_datepicker_3">
+                                        <input type="text" id="effective_date" name="effective_date" class="form-control datepicker" id="kt_datepicker_3">
                                         <div class="input-group-append">
                                             <span class="input-group-text">
                                                 <i class="la la-calendar"></i>
@@ -280,7 +316,7 @@
                                 <div class="form-group">
                                     <label>Expired Date</label>
                                     <div class="input-group date">
-                                        <input type="text" id="expired_date" name="expired_date" class="form-control datepicker" readonly="" id="kt_datepicker_3">
+                                        <input type="text" id="expired_date" name="expired_date" class="form-control datepicker" id="kt_datepicker_3">
                                         <div class="input-group-append">
                                             <span class="input-group-text">
                                                 <i class="la la-calendar"></i>
@@ -376,6 +412,18 @@
             return [month, day, year].join('/');
             }
 
+            function formatDateIndex(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+
+            return [day, month, year].join('/');
+            }
+
         
             function formatDateCalculate(date) {
             var d = new Date(date),
@@ -398,7 +446,7 @@
             if (month.length < 2) month = '0' + month;
             if (day.length < 2) day = '0' + day;
 
-            return [day, month, year].join('-');
+            return [year, month, day].join('-');
             }
 
             function formatDayMonth(date) {
@@ -447,17 +495,17 @@
                             
                             $('#currentDate').text(currentDate);
 
-                            console.log('masuk');
+                            // console.log('masuk');
                            
                         }else{
                             $('#jd').empty();
-                            console.log('kosong1');
+                            // console.log('kosong1');
                         }
                      }
                    });
                }else{
                  $('#jd').empty();
-                 console.log('kosong2');
+                //  console.log('kosong2');
                }
             });
         });
@@ -469,53 +517,115 @@
             $('#currentDate').text(currentDate);
         });
 
+        $('#joindate_radio').on('click', function(){
+            $('#employee_radio').removeAttr('checked');
+            $('#joindate_radio').attr('checked', 'checked');
+            $('#cd_label').text('To (Date)');
+        });
+
+        $('#employee_radio').on('click', function(){
+            $('#joindate_radio').removeAttr('checked');
+            $('#employee_radio').attr('checked', 'checked');
+            $('#cd_label').text('Current Date');
+        });
+
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         $(document).ready(function() {
             $('#btn-simulate').on('click', function() {
                var ct = $('#select_timeoff').val();
                var jd = $('#jd').val();
+               var employee_radio = $('#employee_radio').attr('checked');
+               var joindate_radio = $('#joindate_radio').attr('checked');
+               var joindate_txt = $('#join_date').val();
+            //    console.log(joindate_txt);
                var cd = $('#current_date').val();
                var cd2 = formatDateCalculate(cd);
                var jd2 = formatDateCalculate(jd);
-               $("#tbsimulate").show();
+               var joindate_txt2 = formatDateCalculate(joindate_txt);
                
-               console.log(jd+' '+cd+' '+cd2+' '+jd2);
-               if(ct && jd) {
-                
-                // if ($('#namaEmp').text()) {
-                //     $('#namaEmp').val('');
-                //     $('#namaEmp').text($('#select-employee selected').text());
-                // } else {
-                //     $('#namaEmp').val('');
-                //     $('#namaEmp').text($('#select-employee selected').text());
-                // }
-                $('#namaEmp').text($('#select-employee option:selected').text());
-                var diffYear = new Date(new Date(Date.parse(cd2)) - new Date(Date.parse(jd2))).getFullYear() - 1970;
-                var cutiTahunan = diffYear*12;
-                $('#diffyear').text(cutiTahunan);
-                $("#display-text").show(); 
+               if (employee_radio) {
+                // console.log('1');
 
-                
-               }else{
-                 $('#jd').empty();
-                 console.log('kosong2');
-                 $("#display-text").hide(); 
+                $("#tbsimulate_table").show();
+               
+            //    console.log(jd+' '+cd+' '+cd2+' '+jd2);
+                    if(ct && jd) {
+                        
+                        $('#namaEmp').text($('#select-employee option:selected').text());
+                        var diffYear = new Date(new Date(Date.parse(cd2)) - new Date(Date.parse(jd2))).getFullYear() - 1970;
+                        var cutiTahunan = diffYear*12;
+                        $('#diffyear').text(cutiTahunan);
+                        $("#display-text").show();   
+                    }else{
+                        $('#jd').empty();
+                        Swal.fire(
+                        'Data Simulation Gagal Dimuat',
+                        'Periksa kembali kolom input yang kosong',
+                        'question'
+                        )
+                        $("#display-text").hide(); 
 
-               }
+                    }
+                    var yearSimulate2 = formatYear(jd);
+                    var yearSimulate = parseInt(yearSimulate2) + 1;
+                    var dayMonthSimulate = formatDayMonth(jd);
+                    var toYear = parseInt(yearSimulate) + 1;
+                    $("#tbsimulate").html('');
+                        for(i=0; i<diffYear; i++)
+                            {
+                                $("#tbsimulate").prepend("<tr><td>"+ yearSimulate++ +"-"+ dayMonthSimulate +"</td><td>"+ toYear++ +"-"+ dayMonthSimulate +"</td><td>12</td></tr>");   
+                            } 
+                } else if (joindate_radio) {
+                    // console.log('2');
+                    var currentDate2 = $('#current_date').val();
+                    var currentDate = formatDateCalculateModal(currentDate2);
+                    $('#currentDate').text(currentDate);
+                    // console.log(currentDate);
+                    $("#tbsimulate").show();
+                    
 
-               var yearSimulate = formatYear(jd);
-               var dayMonthSimulate = formatDayMonth(jd);
-               var toYear = parseInt(yearSimulate) + 1;
-               $("#tbsimulate").html('');
-                for(i=1; i<diffYear; i++)
-                    {
-                        $("#tbsimulate").append("<tr><td>"+ yearSimulate++ +"-"+ dayMonthSimulate +"</td><td>"+ toYear++ +"-"+ dayMonthSimulate +"</td><td>12</td></tr>");   
-                    } 
+                //    console.log(jd+' '+cd+' '+cd2+' '+jd2);
+                        if(ct && joindate_txt) {
+                            $('#namaEmp').hide();
+                            var diffYear = new Date(new Date(Date.parse(cd2)) - new Date(Date.parse(joindate_txt2))).getFullYear() - 1970;
+                            var cutiTahunan = diffYear*12;
+                            $('#diffyear').text(cutiTahunan);
+                            $("#display-text").show(); 
+
+                            
+                        }else{
+                            $('#jd').empty();
+                            // console.log('kosong2');
+                            Swal.fire(
+                            'Data Simulation Gagal Dimuat',
+                            'Periksa kembali kolom input yang kosong',
+                            'question'
+                            )
+                            $("#display-text").hide(); 
+
+                        }
+
+                        var yearSimulate2 = formatYear(joindate_txt);
+                        var yearSimulate = parseInt(yearSimulate2) + 1;
+                        // var yearSimulate = formatYear(joindate_txt);
+                        // console.log(yearSimulate);
+                        var dayMonthSimulate = formatDayMonth(joindate_txt);
+                        var toYear = parseInt(yearSimulate) + 1;
+                        $("#tbsimulate").html('');
+                            for(i=0; i<diffYear; i++)
+                                {
+                                    $("#tbsimulate").prepend("<tr><td>"+ yearSimulate++ +"-"+ dayMonthSimulate +"</td><td>"+ toYear++ +"-"+ dayMonthSimulate +"</td><td>12</td></tr>");   
+                                } 
+                         } else {
+                                    $('#jd').empty();
+                                    $('#join_date').empty();
+                                    // console.log('kosong2');
+                                    $("#display-text").hide(); 
+                        }
+      
                 });
                       
             });
-        
-
 
         $(document).on('click', '#btn-edit', function(){
             // console.log("masuk");
@@ -527,12 +637,12 @@
             $('#modalEditTimeOff #name').val($(this).data('name'));
             $('#modalEditTimeOff #code').val($(this).data('code'));
             $('#modalEditTimeOff #description').val($(this).data('description'));
-            $('#modalEditTimeOff #effective_date').val($(this).data('effective_date'));
+            $('#modalEditTimeOff #effective_date').val(formatDateIndex($(this).data('effective_date')));
             if ($(this).data('expired_date') == '2000-01-01') {
                 $('#modalEditTimeOff #expired_date').val('');
 
             } else {
-                $('#modalEditTimeOff #expired_date').val($(this).data('expired_date'));
+                $('#modalEditTimeOff #expired_date').val(formatDateIndex($(this).data('expired_date')));
             }
 
             $('#modalEditTimeOff').modal('toggle');
@@ -556,11 +666,20 @@
                 },
                 success: function(data) {
                     $("#modalEditTimeOff").modal('hide');
-                    alert('Success');
+
+                    Swal.fire(
+                    'Sukses!',
+                    'Data berhasil di Update!',
+                    'success'
+                    )
                     $('#timeoffIndexTable').DataTable().draw();
                 },
                 error: function(data, xhr) {
-                    alert('Oops!')
+                    Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                    })
                 }
             });
         });
@@ -572,14 +691,14 @@
 
         const el = document.querySelector('.kt-radio-inline')
         const join = document.querySelector('.join')
-        const emp = document.querySelector('.emp')
+        const empss = document.querySelector('.emp')
         el.addEventListener('change', function handle(event){
             if (event.target.value == 1) {
                 join.style.display = 'block';
-                emp.style.display = 'none';
+                empss.style.display = 'none';
             } else {
                 join.style.display = 'none';
-                emp.style.display = 'block';
+                empss.style.display = 'block';
             }
         })
 
@@ -621,9 +740,6 @@
                         data: 'expired_date'
                     },
                     {
-                        data: 'log'
-                    },
-                    {
                         data: 'action'
                     }
                 ],
@@ -636,46 +752,7 @@
             placeholder: "Select on option",
         });
 
-        // $('.btn-simulate').click(function() {
-        //     $('.simulate-wrap').toggleClass("d-none");
-        // });
         
-        // var demo2 = function () {
-        //     // set the dropzone container id
-        //     var id = '.kt_dropzone_5';
-        //     // set the preview element template
-        //     var previewNode = $(id + " .dropzone-item");
-        //     previewNode.id = "";
-        //     var previewTemplate = previewNode.parent('.dropzone-items').html();
-        //     previewNode.remove();
-        //     var myDropzone5 = new Dropzone(id, { // Make the whole body a dropzone
-        //         url: "https://keenthemes.com/scripts/void.php", // Set the url for your upload script location
-        //         parallelUploads: 20,
-        //         maxFilesize: 1, // Max filesize in MB
-        //         previewTemplate: previewTemplate,
-        //         previewsContainer: id + " .dropzone-items", // Define the container to display the previews
-        //         clickable: id + " .dropzone-select" // Define the element that should be used as click trigger to select files.
-        //     });
-        //     myDropzone5.on("addedfile", function(file) {
-        //         // Hookup the start button
-        //         $(document).find( id + ' .dropzone-item').css('display', '');
-        //     });
-        //     // Update the total progress bar
-        //     myDropzone5.on("totaluploadprogress", function(progress) {
-        //         $( id + " .progress-bar").css('width', progress + "%");
-        //     });
-        //     myDropzone5.on("sending", function(file) {
-        //         // Show the total progress bar when upload starts
-        //         $( id + " .progress-bar").css('opacity', "1");
-        //     });
-        //     // Hide the total progress bar when nothing's uploading anymore
-        //     myDropzone5.on("complete", function(progress) {
-        //         var thisProgressBar = id + " .dz-complete";
-        //         setTimeout(function(){
-        //             $( thisProgressBar + " .progress-bar, " + thisProgressBar + " .progress").css('opacity', '0');
-        //         }, 300)
-        //     });
-        // }()
 
         
     </script>

@@ -11,6 +11,7 @@ use App\Employee;
 use App\PayrollComponent;
 use App\Payslip;
 use App\Component;
+use App\ComponentUsed;
 use Maatwebsite\Excel\Facades\Excel;
 use App\PayrollEmployeeComponent;
 use App\Exports\ExportComponenPayroll;
@@ -20,10 +21,12 @@ use App\TempEmpComponent;
 use App\JobPosition;
 use App\Joblevel;
 use App\Branch;
+use App\EmployeeThr;
 use App\Organization;
 use Mail;
 use PDF;
 use App\Mail\EmployeeEmail;
+use Carbon\Carbon;
 
 
 
@@ -40,17 +43,14 @@ class PayrollController extends Controller
     public function continuepayroll(request $request){
         $year   = date("Y",strtotime($request->transaksi_id));
         $month  = date("m",strtotime($request->transaksi_id));
-        $runpayroll = PayrollComponent::whereYear('effective_date', '=', $year)->whereMonth('effective_date', '=', $month)->get();
-        $id = array();
-        foreach($runpayroll as $row){
-            $id [] = $row->id;
-        }
+        $id = PayrollComponent::whereYear('effective_date', '=', $year)->whereMonth('effective_date', '=', $month)->orWhereYear('end_date','=', $year)->orWhereMonth('end_date','=', $month)->pluck('id')->first();
+
         $payrollemployeecomponent = PayrollEmployeeComponent::join('employees','payroll_employee_component.employee_id','employees.id')
                                     ->leftjoin('organization','employees.organization_id','organization.id')
                                     ->select('employees.id as employee_id','employees.full_name','payroll_employee_component.component','organization.name as organization','payroll_employee_component.is_created')
-                                    ->whereIN('is_created',$id)
-                                    ->where('is_run',0)
+                                    ->where('payroll_employee_component.is_run','=', 0)
                                     ->get();
+
         return view('admin.payroll.run-payroll.continue-run-payroll',compact('payrollemployeecomponent'));
     }
 
@@ -101,7 +101,7 @@ class PayrollController extends Controller
                 }
                 $payslip = new Payslip;
                 $payslip->employee_id           = $row->employee_id;
-                $payslip->salary_month          = date('Y-m',strtotime($effectivedate->effective_date));
+                $payslip->salary_month          = date('Y-m',strtotime($effectivedate->end_date));
                 $payslip->basic_salary          = $row->basic_salary;
                 $payslip->net_payble            = $takehomepay;
                 $payslip->is_bpjs_active        = $is_bpjs_active;
@@ -253,9 +253,13 @@ class PayrollController extends Controller
                 $edit='<a href="'.route('payroll.component.edit',$row->id).'"  class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit">
                             <i class="la la-eye"></i>
                         </a>';
-                $deleted='<a href="'.route('payroll.component.show',$row->id).'"   class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">
+                if($row->employees == 0){
+                    $deleted='<a href="'.route('payroll.component.delete',$row->id).'"   class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">
                         <i class="la la-trash"></i>
                     </a>';
+                }else{
+                    $deleted="";
+                }
                 $obj['transaksi_id']    = $row->transaksi_id;
                 $obj['type_adjustment'] = $row->type_adjustment;
                 $obj['effective_date']  = date("d M Y",strtotime($row->effective_date));
@@ -449,9 +453,9 @@ class PayrollController extends Controller
             $payrollcomponent->transaksi_id = date('dmy')."".rand(10,1000);
             $payrollcomponent->description = $request->description;
             $payrollcomponent->type_adjustment = $request->type_adjustment;
-            $payrollcomponent->effective_date = date('Y-m-d',strtotime($request->effective_date));
+            $payrollcomponent->effective_date = Carbon::createFromFormat('d/m/Y', $request->effective_date)->format("Y-m-d");
             if($request->end_date != null){
-                $payrollcomponent->end_date = date('Y-m-d',strtotime($request->end_date));
+                $payrollcomponent->end_date = Carbon::createFromFormat('d/m/Y', $request->end_date)->format("Y-m-d");
             }else{
                 $payrollcomponent->end_date = "-";
             }
@@ -523,47 +527,56 @@ class PayrollController extends Controller
 
     public function editCatchComponent(request $request, $id){
         $count = $request->getcomponent;
-        for($i=0; $i <count($count); $i++){
-            $components = Component::find($count[$i]);
-            $arr [] = [
-                'component_id'   =>intval($count[$i]),
-                'component'      =>$components->name,
-                'type'           =>$components->type,
-                'amount'         =>0
-            ];
+        $arrgetcomponent = array();
+
+        foreach($count as $c){
+            $checkused = ComponentUsed::where('id',$c)->first();
+            if(!$checkused){
+                $componentUsed = new ComponentUsed;
+                $componentUsed->id = $c;
+                $componentUsed->save();
+            }
         }
 
-        $arrCreate = json_encode($arr);
-        $payrollcomponent = PayrollEmployeeComponent::where('is_created',$id)->get();
+        $getAllComponentUseds = ComponentUsed::get();
+        foreach($getAllComponentUseds as $getAllComponentUsed){
+            array_push($arrgetcomponent,$getAllComponentUsed->id);
+        }
 
-        foreach($payrollcomponent as $row){
-            $arrcomponent = array();
-            $jsons = json_decode($row->component);
-            if(!isset($jsons)){
-                PayrollEmployeeComponent::where('employee_id',$row->employee_id)->where('is_created',$id)->update([
-                    'component'=>$arrCreate
-                ]);
-            }
-            else{
-                foreach($jsons as $p){
-                    array_push($arrcomponent,[
-                        'component_id'   =>$p->component_id,
-                        'component'      =>$p->component,
-                        'type'           =>$p->type,
-                        'amount'         =>$p->amount
-                    ]);
+        if($arrgetcomponent){
+            $payrollcomponents = PayrollEmployeeComponent::get();
+            foreach($payrollcomponents as $payrollcomponent){
+                $arrcomp = array();
+                $datas = [];
+                if($payrollcomponent->component != null){
+                    $datas = json_decode($payrollcomponent->component , true);
+                    foreach($datas as $key => $v) {
+                        foreach($datas[$key] as $k => $y){
+                            if($k == 'component_id'){
+                                array_push($arrcomp,$y);
+                            }
+                        }
+                    }
                 }
 
-                $merge2 = array_merge($arr,$arrcomponent);
-                $merge = array_unique(array_merge($arr,$arrcomponent), SORT_REGULAR);
-                $arrupdate = json_encode($arrcomponent);
-                PayrollEmployeeComponent::where('employee_id',$row->employee_id)->where('is_created',$id)->update([
-                    'component'=>$arrupdate
-                ]);
-
-
+                $compare = array_diff($arrgetcomponent, $arrcomp);
+                if($compare){
+                    foreach($compare as $comp){
+                        $components = Component::find($comp);
+                        array_push($datas, [
+                            'component_id'   =>$comp,
+                            'component'      =>$components->name,
+                            'type'           =>$components->type,
+                            'amount'         =>0
+                          ]);
+                    }
+                }
+                $payrollcomponent->component = $datas;
+                $payrollcomponent->save();
             }
+
         }
+
         return redirect()->back()->with(['success'=>'component has been updated !']);
     }
 
@@ -675,9 +688,13 @@ class PayrollController extends Controller
     }
 
     public function deletecomponents($id){
-        $TempEmpComponent = TempEmpComponent::find($id);
-        $TempEmpComponent->delete();
-        return redirect()->back()->with(['success'=>'Amount component success deleted!']);
+        if($id){
+            PayrollComponent::where('id',$id)->delete();
+
+            return redirect()->back()->with(['success'=>'the component success deleted!']);
+        }else{
+            return redirect()->back()->with(['error'=>'the component cannot remove!']);
+        }
     }
     /* end component payroll */
 
@@ -944,4 +961,49 @@ class PayrollController extends Controller
     }
 
     /* End Payroll Report */
+
+    /* Begin Run THR */
+    public function showThr(){
+        $employees = Employee::with(['organization','branch'])->get();
+        return view('admin.payroll.run-thr.index', compact('employees'));
+    }
+
+    public function runThr(Request $request){
+
+        if(!empty($request->all())){
+
+            foreach($request->all() as $employee_id){
+                $join_date = Employee::where('id',$employee_id)->pluck('join_date')->first();
+                if(isset($join_date)){
+                    $from = Carbon::createFromFormat('Y-m-d', $join_date);
+                    $to = Carbon::createFromFormat('Y-m-d', Carbon::now()->format('Y-m-d'))->addMonth();
+                    $employeeActiveMonths = $to->diffInMonths($from);
+
+                    //get basic salary
+                    $objComponent = PayrollEmployeeComponent::where('employee_id', $employee_id)->pluck('component')->first();
+                    $arrComponent = json_decode($objComponent);
+                    $basic_salary = $arrComponent[0]->amount;
+
+                    if($employeeActiveMonths < 12){
+                    $amountThr = (($employeeActiveMonths/12)*$basic_salary);
+                    }else{
+                    $amountThr = $basic_salary;
+                    }
+
+                    // run thr create table employee thr;
+                    $data = array('employee_id'=> $employee_id,'total_months'=>$employeeActiveMonths,'amount_thr'=> $amountThr,'is_run'=> 1);
+                    EmployeeThr::create($data);
+                }
+                else{
+                    $data = ['message' => 'error','redirect_url'=> route('payroll.run.thr')];
+                    return response()->json($data, 404);
+                }
+            }
+
+            $data = ['message' => 'success','redirect_url'=> route('payroll')];
+            return response()->json($data, 200);
+        }
+    }
+
+    /* End Run THR */
 }

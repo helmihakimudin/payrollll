@@ -32,7 +32,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label class="form-control-label" >Name:</label>
-                            <select name="employee_id" id="employee_name" class="form-control select2" required style="width:100%">
+                            <select name="employee_id" id="employee_name" class="form-control select2" required style="width:100%" readonly>
                                 <option value="" selected>Select</option>
                                 @foreach($employee as $row)
                                 <option value="{{$row->id}}" name="{{$row->full_name}}" @if($pengguna->name==$row->full_name)selected @endif>{{$row->full_name}}</option>
@@ -56,12 +56,12 @@
                             <input type="email" name="email" id="user_email" class="form-control" value="{{$pengguna->email}}"  autocomplete="off" required disabled>
                         </div>
                         <div class="form-group">
-                            <label class="form-control-label" >Password:</label>
-                            <input type="password" name="password" class="form-control" autocomplete="off">
+                            <!-- <label class="form-control-label" >Password:</label> -->
+                            <input type="hidden" name="password" id="password" value="{{$pengguna->password}}" class="form-control">
                         </div>
                         <div class="form-group">
                             <label >Rules :</label>
-                            <select class="form-control select2"  style="width:100%;" id="type" name="type" required>
+                            <select class="form-control select2"  style="width:100%;" id="type" name="type">
                                 <option value="">Choose Rules</option>
                                 @foreach(DB::table('roles')->get() as $row)
                                 <option @if($pengguna->role_id == $row->id) {{"selected"}} @endif value="{{$row->id}}">{{$row->name}}</option>
@@ -185,7 +185,7 @@
     }
 
     $('.select2').select2();
-    $('#employee_name').select2().enable(false);
+    $('#employee_name').select2().enable(true);
     $('#branch_id_user').select2().enable(false);
     $('#employee_name').on('select2:select',function(event) {
         var val = event.params.data.id;
@@ -204,6 +204,7 @@
 					$('#mobile_phone').val(dataParse.mobile_phone);
                     $("#branch_id_user").val(dataParse.branch_id).trigger("change");
 					$('#user_email').val(dataParse.email);
+                    $('#password').val(dataParse.password);
                 }
             }
         });

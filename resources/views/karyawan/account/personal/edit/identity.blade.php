@@ -1,3 +1,4 @@
+@section('content-account')
 <div class="kt-portlet">
     <div class="kt-portlet__body">
         <div class="row">
@@ -6,154 +7,69 @@
                 <span style="font-size:11px;">&nbsp;</span>
             </div>
             <div class="col-lg-6">
-                <form action="{{route("emp.account.personal.identity.request.update",$karyawan->id)}}" id="form-personal" method="POST">
+                <form action="{{route("emp.account.personal.identity.request.update",$karyawan->id)}}" id="form-personal-identity" method="POST">
+                    <input type="hidden" name="residential_address_hidden" value="{{$karyawan->residential_address}}">
                     @csrf
                     @method('PUT')
                     <ul class="list-unstyled mb-0">
                         <li>
                             <div class="row py-2">
-                                    <div class="col-sm-4 d-flex align-items-center">
-                                        <span class="font-weight-bold"> First Name </span>
-                                    </div>
-                                <div class="col-sm-8"><p><input type="text" class="form-control" name="first_name" value="{{$karyawan->first_name}}"></p></div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="row py-2">
-                                    <div class="col-sm-4 d-flex align-items-center">
-                                        <span class="font-weight-bold"> Last Name </span>
-                                    </div>
-                                <div class="col-sm-8"><p><input type="text" class="form-control" name="last_name" value="{{$karyawan->last_name}}"></p></div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="row py-2">
                                 <div class="col-sm-4 d-flex align-items-center">
-                                    <span class="font-weight-bold"> Mobile phone </span>
-                                </div>
-                                <div class="col-sm-8"><p><input type="text" class="form-control" name="mobile_phone" value="{{$karyawan->mobile_phone}}"></p></div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="row py-2">
-                                <div class="col-sm-4 d-flex align-items-center">
-                                    <span class="font-weight-bold"> Mobile phone </span>
-                                </div>
-                                <div class="col-sm-8"><p><input type="text" class="form-control" name="phone" value="{{$karyawan->phone}}"></p></div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="row py-2">
-                                <div class="col-sm-4 d-flex align-items-center">
-                                    <span class="font-weight-bold"> Email </span>
-                                </div>
-                                <div class="col-sm-8"><p><input type="text" class="form-control" name="email" value="{{$karyawan->email}}"></p></div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="row py-2">
-                                <div class="col-sm-4 d-flex align-items-center">
-                                    <span class="font-weight-bold">Place Of Birth</span>
-                                </div>
-                                <div class="col-sm-8"><p><input type="text" class="form-control" name="place_of_birth" value="{{$karyawan->place_of_birth}}"></p></div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="row py-2">
-                                <div class="col-sm-4 d-flex align-items-center">
-                                    <span class="font-weight-bold">Date of Birth</span>
-                                </div>
-                                <div class="col-sm-8"><p><input type="text" class="form-control datepicker-modal" name="date_of_birth" value="{{date("m/d/Y",strtotime($karyawan->date_of_birth))}}"></p></div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="row py-2">
-                                <div class="col-sm-4 d-flex align-items-center">
-                                    <span class="font-weight-bold">Blood of type</span>
-                                </div>
-                                <div class="col-sm-8"><p><input type="text" class="form-control " name="blood_of_type" value="{{$karyawan->blood_type}}"></p></div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="row py-2">
-                                <div class="col-sm-4 d-flex align-items-center">
-                                    <span class="font-weight-bold">Merriage status</span>
+                                    <span class="font-weight-bold"> ID Type </span>
                                 </div>
                                 <div class="col-sm-8">
-                                    <p>
-                                        <select name="marital_status" id="marital_status" class="form-control select-custom" required>
-                                            @if($karyawan->marital_status == 'Married')
-                                                <option value="Married" selected>Married</option>
-                                                <option value="Not married yet">Not Married Yet</option>
-                                            @elseif($karyawan->marital_status == 'Not married yet')
-                                                <option value="Not married yet" selected >Not Married Yet</option>
-                                                <option value="Married">Married</option>
-                                            @else 
-                                                <option value="" selected>Select</option>
-                                                <option value="Married">Married</option>
-                                                <option value="Not married yet">Not Married Yet</option>
-                                            @endif
-                                        
-                                        </select> 
-                                    </p>
+                                <select name="identity_type" id="identity_type" class="form-control select2_add_employee" required>
+                                    <option value="">Select</option>
+                                    <option value="SIM" @if($karyawan->identity_type=="SIM") selected @endif>SIM</option>
+                                    <option value="KTP" @if($karyawan->identity_type=="KTP") selected @endif>KTP</option>
+                                    <option value="passport" @if($karyawan->identity_type=="passport") selected @endif>Passport</option>
+                                </select>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row py-2">
+                                    <div class="col-sm-4 d-flex align-items-center">
+                                        <span class="font-weight-bold">ID Number</span>
+                                    </div>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="identity_number" value="{{$karyawan->identity_number}}">
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="row py-2">
                                 <div class="col-sm-4 d-flex align-items-center">
-                                    <span class="font-weight-bold">Religion</span>
+                                    <span class="font-weight-bold">Postal Code </span>
                                 </div>
                                 <div class="col-sm-8">
-                                    <p>
-                                        <select name="religion" id="religion" class="form-control select-custom" required>
-                                            @if($karyawan->religion == 'Islam')
-                                                <option value="Islam" selected>Islam</option>
-                                                <option value="Buddha" >Buddha</option>
-                                                <option value="Confucius">Confucius</option>
-                                                <option value="Catholic">Catholic</option>
-                                                <option value="Christian">Christian</option>
-                                                <option value="Hindu">Hindu</option>
-                                            @elseif($karyawan->religion == 'Catholic')
-                                                <option value="Catholic" selected>Catholic</option>
-                                                <option value="Buddha" >Buddha</option>
-                                                <option value="Confucius">Confucius</option>
-                                                <option value="Islam">Islam</option>
-                                                <option value="Christian">Christian</option>
-                                                <option value="Hindu">Hindu</option>
-                                            @elseif($karyawan->religion == 'Christian')
-                                                <option value="Christian" selected>Christian</option>
-                                                <option value="Buddha" >Buddha</option>
-                                                <option value="Confucius">Confucius</option>
-                                                <option value="Islam">Islam</option>
-                                                <option value="Catholic">Catholic</option>
-                                                <option value="Hindu">Hindu</option>
-                                            @elseif($karyawan->religion == 'Buddha')
-                                                <option value="Buddha" selected>Buddha</option>
-                                                <option value="Confucius">Confucius</option>
-                                                <option value="Islam">Islam</option>
-                                                <option value="Catholic">Catholic</option>
-                                                <option value="Christian">Christian</option>
-                                                <option value="Hindu">Hindu</option>
-                                            @elseif($karyawan->religion == 'Confucius')
-                                                <option value="Confucius" selected>Confucius</option>
-                                                <option value="Islam">Islam</option>
-                                                <option value="Catholic">Catholic</option>
-                                                <option value="Christian">Christian</option>
-                                                <option value="Buddha">Buddha</option>
-                                                <option value="Hindu">Hindu</option>
-                                            @elseif($karyawan->religion == 'Hindu')
-                                            @else 
-                                                <option value="" selected>Select</option>
-                                                <option value="Islam">Islam</option>
-                                                <option value="Catholic">Catholic</option>
-                                                <option value="Christian">Christian</option>
-                                                <option value="Buddha">Buddha</option>
-                                                <option value="Confucius">Confucius</option>
-                                                <option value="Hindu">Hindu</option>
-                                            @endif
-                                        </select>
-                                    </p>
+                                    <input type="text" class="form-control" name="postal_code" value="{{$karyawan->postal_code}}">
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row py-2">
+                                <div class="col-sm-4 d-flex align-items-center">
+                                    <span class="font-weight-bold"> Citizen ID address </span>
+                                </div>
+                                <div class="col-sm-8">
+                                    <textarea name="citizien_id_address" id="citizien_id_address" cols="30" rows="3" class="form-control" placeholder="Please Enter Address ID Card" required>{{$karyawan->citizien_id_address}}</textarea>
+                                </div>
+                            </div>
+                            <div class="kt-checkbox-inline pt-3">
+                                <label class="kt-checkbox">
+                                    <input type="checkbox" name="checkbox_residential_address" id="copas-address"> use as residential address
+                                    <span></span>
+                                </label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row py-2">
+                                <div class="col-sm-4 d-flex align-items-center">
+                                    <span class="font-weight-bold">Residential address</span>
+                                </div>
+                                <div class="col-sm-8">
+                                    <textarea name="residential_address" id="residential_address" cols="30" rows="3" class="form-control" placeholder="Please Enter Residence address" required>{{$karyawan->residential_address}}</textarea>
                                 </div>
                             </div>
                         </li>
@@ -178,8 +94,8 @@
                 &nbsp;
             </div>
             <div class="col-lg-2">
-                <a href="javascript::" class="btn btn-primary btn-sm btn-rounded-fill btn-cancel-personal">Cancel</a>
-                <button type="submit" form="form-personal"  class="btn btn-primary btn-sm btn-rounded-fill">Request</button>
+                <a href="javascript::" class="btn btn-outline-danger mx-3 btn-sm btn-rounded-fill btn-cancel-identity">Cancel</a>
+                <button type="submit" form="form-personal-identity"  class="btn btn-primary btn-sm btn-rounded-fill">Request</button>
             </div>
         </div>
     </div>
